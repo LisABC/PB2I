@@ -28,7 +28,7 @@ type
     Timer* = ref object of BaseMapObject
         enabled*: bool
         callback*: Trigger
-        delay*: int
+        delay*, maxCalls*: int
     
     # Movable
     Movable* = ref object of BaseMapObject
@@ -38,6 +38,7 @@ type
 
     # Region
     RegionActivation* = enum
+        NOTHING = -1,
         BUTTON = 1,
         BY_CHAR_NOT_IN_VEHICLE,
         BY_CHAR_IN_VEHICLE,
@@ -80,8 +81,43 @@ proc dump*(movable: Movable): string =
         moving = $movable.moving,
         tarx = $movable.tarx,
         tary = $movable.tary,
-        attach = $attachTo,
+        attach = attachTo,
         maxspeed = $movable.speed
+    ))
+
+proc dump*(region: Region): string =
+    var attachTo = "-1"
+    if not region.attachTo.isNil:
+        attachTo = region.attachTo.name
+    var useTarget = "-1"
+    if not region.actTrigger.isNil:
+        useTarget = region.actTrigger.name
+
+    
+    return $(<>region(
+        uid = region.name,
+        x = $region.x,
+        y = $region.y,
+        w = $region.w,
+        h = $region.h,
+        use_target = useTarget,
+        use_on = $region.actOn.ord,
+        attach = attachTo
+    ))
+
+proc dump*(timer: Timer): string =
+    var callback = "-1"
+    if not timer.callback.isNil:
+        callback = timer.callback.name
+    
+    return $(<>timer(
+        uid = timer.name,
+        x = $timer.x,
+        y = $timer.y,
+        enabled = $timer.enabled,
+        maxcalls = $timer.maxCalls,
+        target = callback,
+        delay = $timer.delay
     ))
 
 # Constructors.
@@ -92,10 +128,10 @@ proc newMovable*(name: string, x, y, w, h, tarx, tary = 0, speed = 10, visible =
         speed: speed,
         visible: visible,
         attachTo: attachTo,
-        moving: moving,
+        moving: moving
     )
 
-proc newRegion*(name: string, x, y, w, h = 0, actTrigger: Trigger, actOn: RegionActivation, attachTo: Movable = nil): Region =
+proc newRegion*(name: string, x, y, w, h = 0, actTrigger: Trigger = nil, actOn = NOTHING, attachTo: Movable = nil): Region =
     result = Region(
         name: name,
         x: x, y: y, w: w, h: h,
@@ -104,13 +140,14 @@ proc newRegion*(name: string, x, y, w, h = 0, actTrigger: Trigger, actOn: Region
         attachTo: attachTo
     )
 
-proc newTimer*(name: string, x, y = 0, enabled = true, callback: Trigger = nil, delay = 30): Timer =
+proc newTimer*(name: string, x, y = 0, enabled = true, callback: Trigger = nil, maxCalls = 1, delay = 30): Timer =
     result = Timer(
         name: name,
         x: x, y: y,
         enabled: enabled,
         callback: callback,
-        delay: delay
+        delay: delay,
+        maxCalls: maxCalls
     )
 
 proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[]): Trigger =
