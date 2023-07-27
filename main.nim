@@ -12,5 +12,11 @@ with trigger:
     setVariable(var1, var2)
     sendChatMessage(EXOS, "Var is ", var1)
 
+
+#with trigger:
+#    actions = @[]
+#    generateIntNumber(var1, 10)
+#    sendChatMessage(EXOS, "Number: ", var1)
+
 for action in trigger.actions:
     echo "opID: " & $action.opID & " args: " & $action.args

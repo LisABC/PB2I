@@ -191,6 +191,21 @@ proc setVariable*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable
     trigger.addAction(125, @[$pbvar1, $pbvar2])
 
 
+proc generateFloatNumber*(trigger: Trigger, pbvar: PBVar, value: int): Action {.discardable.} =
+    # Set variable 'A' to random floating number in range 0..B
+    trigger.addAction(106, @[$pbvar, $value])
+proc generateFloatNumber*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
+    # Set variable 'A' to random floating number in range 0..X where X is variable
+    trigger.addAction(327, @[$pbvar1, $pbvar2])
+
+proc generateIntNumber*(trigger: Trigger, pbvar: PBVar, value: int): Action {.discardable.} =
+    # Set variable 'A' to random integer number in range 0..B-1
+    trigger.addAction(107, @[$pbvar, $value])
+proc generateIntNumber*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
+    # Set variable 'A' to random integer number in range 0..X-1 where X is variable
+    trigger.addAction(328, @[$pbvar1, $pbvar2])
+
+
 proc sendChatMessage*(trigger: Trigger, who = EXOS, texts: varargs[string, `$`]): Action {.discardable.} =
     # Show text 'A' in chat with color 'B'
     var text = ""
