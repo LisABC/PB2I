@@ -61,6 +61,15 @@ type
         actTrigger*: Trigger
         actOn*: RegionActivation
         attachTo*: Movable
+    
+    # Wall.
+    Box* = ref object
+        x*, y*, w*, h*, material*: int
+    
+    # Water.
+    Water* = ref object
+        x*, y*, w*, h*, damage*: int
+        friction*: bool
 
 # Others
 proc `$`*(pbvar: PBVar): string {.borrow.}
@@ -120,6 +129,25 @@ proc dump*(timer: Timer): string =
         delay = $timer.delay
     ))
 
+proc dump*(box: Box): string =
+    return $(<>box(
+        x = $box.x,
+        y = $box.y,
+        w = $box.w,
+        h = $box.h,
+        m = $box.material
+    ))
+
+proc dump*(water: Water): string =
+    return $(<>water(
+        x = $water.x,
+        y = $water.y,
+        w = $water.w,
+        h = $water.h,
+        damage = $water.damage,
+        friction = $water.friction
+    ))
+
 # Constructors.
 proc newMovable*(name: string, x, y, w, h, tarx, tary = 0, speed = 10, visible = true, moving = false, attachTo: Movable = nil): Movable =
     result = Movable(
@@ -157,6 +185,19 @@ proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: 
         enabled: enabled,
         maxCalls: maxCalls,
         actions: actions
+    )
+
+proc newBox*(x, y, w, h, material = 0): Box =
+    result = Box(
+        x:x, y:y, w:w, h:h, 
+        material: material
+    )
+
+proc newWater*(x, y, w, h, damage = 0, friction = true): Water =
+    result = Water(
+        x: x, y: y, w: w, h: h,
+        damage: damage,
+        friction: friction
     )
 
 # Trigger.
