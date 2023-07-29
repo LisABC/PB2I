@@ -70,6 +70,26 @@ type
     Water* = ref object
         x*, y*, w*, h*, damage*: int
         friction*: bool
+    
+    # Decor.
+    Decoration* = ref object of BaseMapObject
+        model*: string
+        layer*: int
+        texX*, texY*: int
+        rotation*: int
+        scaleX*, scaleY*: int
+        attachTo*: Movable
+    
+    # Player & Enemy.
+    Character* = ref object of BaseMapObject
+        isPlayer*: bool # We need to know if we should output player or normal enemy.
+        tox*, toy*: int
+        hea*, hmax*: int
+        team*: int
+        side*, skin*, incar*: int
+        botAction*: int
+        onDeath*: Trigger
+
 
 # Others
 proc `$`*(pbvar: PBVar): string {.borrow.}
@@ -148,6 +168,47 @@ proc dump*(water: Water): string =
         friction = $water.friction
     ))
 
+proc dump*(decor: Decoration): string =
+    var attachTo = "-1"
+    if not decor.attachTo.isNil:
+        attachTo = decor.attachTo.name
+    return $(<>decor(
+        uid = decor.name,
+        x = $decor.x,
+        y = $decor.y,
+        u = $decor.texX,
+        v = $decor.texY,
+        r = $decor.rotation,
+        sx = $decor.scaleX,
+        sy = $decor.scaleY,
+        f = $decor.layer,
+        model = decor.model,
+        attach = attachTo
+    ))
+
+proc dump*(character: Character): string =
+    var onDeath = "-1"
+    if not character.onDeath.isNil:
+        onDeath = character.onDeath.name
+    var a = <>player(
+        uid = character.name,
+        x = $character.x,
+        y = $character.y,
+        tox = $character.tox,
+        toy = $character.toy,
+        hea = $character.hea,
+        hmax = $character.hmax,
+        team = $character.team,
+        side = $character.side,
+        incar = $character.incar,
+        botaction = $character.botAction,
+        ondeath = ondeath,
+        char = $character.skin
+    )
+    if not character.isPlayer:
+        a.tag = "enemy"
+    return $a
+
 # Constructors.
 proc newMovable*(name: string, x, y, w, h, tarx, tary = 0, speed = 10, visible = true, moving = false, attachTo: Movable = nil): Movable =
     result = Movable(
@@ -198,6 +259,28 @@ proc newWater*(x, y, w, h, damage = 0, friction = true): Water =
         x: x, y: y, w: w, h: h,
         damage: damage,
         friction: friction
+    )
+
+proc newDecoration*(name: string, x, y, texX, texY, rotation, layer = 0, scaleX, scaleY = 1, model = "stone", attachTo: Movable = nil): Decoration =
+    result = Decoration(
+        name: name,
+        x: x, y: y,
+        texX: texX, texY: texY,
+        rotation: rotation, layer: layer,
+        scaleX: scaleX, scaleY: scaleY,
+        model: model,
+        attachTo: attachTo
+    )
+
+proc newCharacter*(name: string, x, y, tox, toy = 0, hea, hmax = 130, team = 0, side = 1, skin = -1, incar = -1, botAction = 4, onDeath: Trigger = nil, isPlayer = true): Character =
+    result = Character(
+        name: name,
+        x: x, y: y, tox: tox, toy: toy,
+        hea: hea, hmax: hmax,
+        team: team, side: side,
+        skin: skin, incar: incar, botAction: botAction,
+        onDeath: onDeath,
+        isPlayer: isPlayer
     )
 
 # Trigger.
