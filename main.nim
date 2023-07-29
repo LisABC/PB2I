@@ -1,7 +1,8 @@
 import std/with
 import src/pb2i
 
-var trigger = newTrigger("#trigger*0")
+var map = newMap()
+var trigger = map.newTrigger("#trigger*0")
 
 var var1 = "#var1".PBVar
 var var2 = "#var2".PBVar

@@ -11,27 +11,29 @@ type
     PBVar* = distinct string
 
     BaseMapObject* = ref object of RootObj
-        name*: string
         x*, y*: int
+
+    BaseNamedMapObject* = ref object of BaseMapObject
+        name*: string
 
     # Trigger
     Action* = ref object
         opID*: int
         args*: seq[string]
 
-    Trigger* = ref object of BaseMapObject
+    Trigger* = ref object of BaseNamedMapObject
         enabled*: bool
         maxCalls*: int
         actions*: seq[Action]
     
     # Timer
-    Timer* = ref object of BaseMapObject
+    Timer* = ref object of BaseNamedMapObject
         enabled*: bool
         callback*: Trigger
         delay*, maxCalls*: int
     
     # Movable
-    Movable* = ref object of BaseMapObject
+    Movable* = ref object of BaseNamedMapObject
         w*, h*, speed*, tarx*, tary*: int
         visible*, moving*: bool
         attachTo*: Movable
@@ -56,23 +58,23 @@ type
         INVISIBLE_BUTTON_WITHOUT_SOUND
 
 
-    Region* = ref object of BaseMapObject
+    Region* = ref object of BaseNamedMapObject
         w*, h*: int
         actTrigger*: Trigger
         actOn*: RegionActivation
         attachTo*: Movable
     
     # Wall.
-    Box* = ref object
-        x*, y*, w*, h*, material*: int
+    Box* = ref object of BaseMapObject
+        w*, h*, material*: int
     
     # Water.
-    Water* = ref object
-        x*, y*, w*, h*, damage*: int
+    Water* = ref object of BaseMapObject
+        w*, h*, damage*: int
         friction*: bool
     
     # Decor.
-    Decoration* = ref object of BaseMapObject
+    Decoration* = ref object of BaseNamedMapObject
         model*: string
         layer*: int
         texX*, texY*: int
@@ -81,7 +83,7 @@ type
         attachTo*: Movable
     
     # Player & Enemy.
-    Character* = ref object of BaseMapObject
+    Character* = ref object of BaseNamedMapObject
         isPlayer*: bool # We need to know if we should output player or normal enemy.
         tox*, toy*: int
         hea*, hmax*: int
@@ -89,6 +91,19 @@ type
         side*, skin*, incar*: int
         botAction*: int
         onDeath*: Trigger
+    
+    Map* = ref object
+        # Addressable objects. (Ones inheriting BaseNamedMapObject)
+        triggers: seq[Trigger]
+        timers: seq[Timer]
+        characters: seq[Character]
+        movables: seq[Movable]
+        decorations: seq[Decoration]
+        regions: seq[Region]
+
+        # Unaddressable objects.
+        waters: seq[Water]
+        boxes: seq[Box]
 
 
 # Others
@@ -210,7 +225,10 @@ proc dump*(character: Character): string =
     return $a
 
 # Constructors.
-proc newMovable*(name: string, x, y, w, h, tarx, tary = 0, speed = 10, visible = true, moving = false, attachTo: Movable = nil): Movable =
+proc newMap*(): Map =
+    return Map()
+
+proc newMovable*(map: Map, name: string, x, y, w, h, tarx, tary = 0, speed = 10, visible = true, moving = false, attachTo: Movable = nil): Movable =
     result = Movable(
         name: name,
         x: x, y: y, w: w, h: h, tarx: tarx, tary: tary,
@@ -219,8 +237,9 @@ proc newMovable*(name: string, x, y, w, h, tarx, tary = 0, speed = 10, visible =
         attachTo: attachTo,
         moving: moving
     )
+    map.movables.add(result)
 
-proc newRegion*(name: string, x, y, w, h = 0, actTrigger: Trigger = nil, actOn = NOTHING, attachTo: Movable = nil): Region =
+proc newRegion*(map: Map, name: string, x, y, w, h = 0, actTrigger: Trigger = nil, actOn = NOTHING, attachTo: Movable = nil): Region =
     result = Region(
         name: name,
         x: x, y: y, w: w, h: h,
@@ -228,8 +247,9 @@ proc newRegion*(name: string, x, y, w, h = 0, actTrigger: Trigger = nil, actOn =
         actOn: actOn,
         attachTo: attachTo
     )
+    map.regions.add(result)
 
-proc newTimer*(name: string, x, y = 0, enabled = true, callback: Trigger = nil, maxCalls = 1, delay = 30): Timer =
+proc newTimer*(map: Map, name: string, x, y = 0, enabled = true, callback: Trigger = nil, maxCalls = 1, delay = 30): Timer =
     result = Timer(
         name: name,
         x: x, y: y,
@@ -238,8 +258,9 @@ proc newTimer*(name: string, x, y = 0, enabled = true, callback: Trigger = nil, 
         delay: delay,
         maxCalls: maxCalls
     )
+    map.timers.add(result)
 
-proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[]): Trigger =
+proc newTrigger*(map: Map, name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[]): Trigger =
     result = Trigger(
         name: name,
         x: x, y: y,
@@ -247,21 +268,24 @@ proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: 
         maxCalls: maxCalls,
         actions: actions
     )
+    map.triggers.add(result)
 
-proc newBox*(x, y, w, h, material = 0): Box =
+proc newBox*(map: Map, x, y, w, h, material = 0): Box =
     result = Box(
         x:x, y:y, w:w, h:h, 
         material: material
     )
+    map.boxes.add(result)
 
-proc newWater*(x, y, w, h, damage = 0, friction = true): Water =
+proc newWater*(map: Map, x, y, w, h, damage = 0, friction = true): Water =
     result = Water(
         x: x, y: y, w: w, h: h,
         damage: damage,
         friction: friction
     )
+    map.waters.add(result)
 
-proc newDecoration*(name: string, x, y, texX, texY, rotation, layer = 0, scaleX, scaleY = 1, model = "stone", attachTo: Movable = nil): Decoration =
+proc newDecoration*(map: Map, name: string, x, y, texX, texY, rotation, layer = 0, scaleX, scaleY = 1, model = "stone", attachTo: Movable = nil): Decoration =
     result = Decoration(
         name: name,
         x: x, y: y,
@@ -271,8 +295,9 @@ proc newDecoration*(name: string, x, y, texX, texY, rotation, layer = 0, scaleX,
         model: model,
         attachTo: attachTo
     )
+    map.decorations.add(result)
 
-proc newCharacter*(name: string, x, y, tox, toy = 0, hea, hmax = 130, team = 0, side = 1, skin = -1, incar = -1, botAction = 4, onDeath: Trigger = nil, isPlayer = true): Character =
+proc newCharacter*(map: Map, name: string, x, y, tox, toy = 0, hea, hmax = 130, team = 0, side = 1, skin = -1, incar = -1, botAction = 4, onDeath: Trigger = nil, isPlayer = true): Character =
     result = Character(
         name: name,
         x: x, y: y, tox: tox, toy: toy,
@@ -282,6 +307,7 @@ proc newCharacter*(name: string, x, y, tox, toy = 0, hea, hmax = 130, team = 0, 
         onDeath: onDeath,
         isPlayer: isPlayer
     )
+    map.characters.add(result)
 
 # Trigger.
 proc addAction*(trigger: Trigger, action: Action) {.inline.} =
