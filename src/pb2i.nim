@@ -92,6 +92,12 @@ type
         botAction*: int
         onDeath*: Trigger
     
+    Song* = ref object of BaseNamedMapObject
+        url*: string
+        volume*: int
+        loop*: bool
+        onEnd*: Trigger
+    
     Map* = ref object
         # Addressable objects. (Ones inheriting BaseNamedMapObject)
         triggers: seq[Trigger]
@@ -100,6 +106,7 @@ type
         movables: seq[Movable]
         decorations: seq[Decoration]
         regions: seq[Region]
+        songs: seq[Song]
 
         # Unaddressable objects.
         waters: seq[Water]
@@ -224,6 +231,20 @@ proc dump*(character: Character): string =
         a.tag = "enemy"
     return $a
 
+proc dump*(song: Song): string =
+    var callback = "-1"
+    if not song.onEnd.isNil:
+        callback = song.onEnd.name
+    result = $(<>song(
+        uid = song.name,
+        x = $song.x,
+        y = $song.y,
+        volume = $song.volume,
+        url = song.url,
+        loop = $song.loop,
+        callback = callback
+    ))
+
 # Constructors.
 proc newMap*(): Map =
     return Map()
@@ -308,6 +329,16 @@ proc newCharacter*(map: Map, name: string, x, y, tox, toy = 0, hea, hmax = 130, 
         isPlayer: isPlayer
     )
     map.characters.add(result)
+
+proc newSong*(map: Map, name: string, x, y = 0, url = "", volume = 1, loop = true, onEnd: Trigger = nil): Song =
+    result = Song(
+        name: name,
+        x: x, y:y,
+        url: url,
+        loop: loop,
+        onEnd: onEnd,
+        volume: volume
+    )
 
 # Trigger.
 proc addAction*(trigger: Trigger, action: Action) {.inline.} =
