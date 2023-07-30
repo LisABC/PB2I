@@ -98,6 +98,9 @@ type
         loop*: bool
         onEnd*: Trigger
     
+    EngineMark* = ref object of BaseMapObject
+        modifier*, parameter*: string
+    
     Map* = ref object
         # Addressable objects. (Ones inheriting BaseNamedMapObject)
         triggers: seq[Trigger]
@@ -111,6 +114,7 @@ type
         # Unaddressable objects.
         waters: seq[Water]
         boxes: seq[Box]
+        engineMarks: seq[EngineMark]
 
 
 # Others
@@ -245,6 +249,14 @@ proc dump*(song: Song): string =
         callback = callback
     ))
 
+proc dump*(engineMark: EngineMark): string =
+    result = $(<>inf(
+        x = $engineMark.x,
+        y = $engineMark.y,
+        mark = engineMark.modifier,
+        forteam = engineMark.parameter
+    ))
+
 # Constructors.
 proc newMap*(): Map =
     return Map()
@@ -339,6 +351,16 @@ proc newSong*(map: Map, name: string, x, y = 0, url = "", volume = 1, loop = tru
         onEnd: onEnd,
         volume: volume
     )
+    map.songs.add(result)
+
+proc newEngineMark*(map: Map, x, y = 0, modifier = "hero1_guns", parameter = "0"): EngineMark =
+    result = EngineMark(
+        x: x, y: y,
+        modifier: modifier,
+        parameter: parameter
+    )
+    map.engineMarks.add(result)
+    
 
 # Trigger.
 proc addAction*(trigger: Trigger, action: Action) {.inline.} =
