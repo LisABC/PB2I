@@ -101,6 +101,10 @@ type
     EngineMark* = ref object of BaseMapObject
         modifier*, parameter*: string
     
+    Lamp* = ref object of BaseNamedMapObject
+        power*: float
+        hasFlare*: bool
+    
     Map* = ref object
         # Addressable objects. (Ones inheriting BaseNamedMapObject)
         triggers: seq[Trigger]
@@ -110,6 +114,7 @@ type
         decorations: seq[Decoration]
         regions: seq[Region]
         songs: seq[Song]
+        lamps: seq[Lamp]
 
         # Unaddressable objects.
         waters: seq[Water]
@@ -257,6 +262,15 @@ proc dump*(engineMark: EngineMark): string =
         forteam = engineMark.parameter
     ))
 
+proc dump*(lamp: Lamp): string =
+    result = $(<>lamp(
+        uid = lamp.name,
+        x = $lamp.x,
+        y = $lamp.y,
+        power = $lamp.power,
+        flare = $lamp.hasFlare
+    ))
+
 # Constructors.
 proc newMap*(): Map =
     return Map()
@@ -360,7 +374,14 @@ proc newEngineMark*(map: Map, x, y = 0, modifier = "hero1_guns", parameter = "0"
         parameter: parameter
     )
     map.engineMarks.add(result)
-    
+
+proc newLamp*(map: Map, name: string, x, y = 0, power = 0.4, hasFlare = true): Lamp =
+    result = Lamp(
+        name: name,
+        x: x, y: y,
+        power: power, hasFlare: hasFlare
+    )
+    map.lamps.add(result)
 
 # Trigger.
 proc addAction*(trigger: Trigger, action: Action) {.inline.} =
