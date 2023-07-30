@@ -105,6 +105,10 @@ type
         power*: float
         hasFlare*: bool
     
+    Barrel* = ref object of BaseNamedMapObject
+        model*: string
+        tox*, toy*: int
+    
     Map* = ref object
         # Addressable objects. (Ones inheriting BaseNamedMapObject)
         triggers: seq[Trigger]
@@ -115,6 +119,7 @@ type
         regions: seq[Region]
         songs: seq[Song]
         lamps: seq[Lamp]
+        barrels: seq[Barrel]
 
         # Unaddressable objects.
         waters: seq[Water]
@@ -271,6 +276,16 @@ proc dump*(lamp: Lamp): string =
         flare = $lamp.hasFlare
     ))
 
+proc dump*(barrel: Barrel): string =
+    result = $(<>barrel(
+        uid = barrel.name,
+        x = $barrel.x,
+        y = $barrel.y,
+        tox = $barrel.tox,
+        toy = $barrel.toy,
+        model = barrel.model
+    ))
+
 # Constructors.
 proc newMap*(): Map =
     return Map()
@@ -382,6 +397,15 @@ proc newLamp*(map: Map, name: string, x, y = 0, power = 0.4, hasFlare = true): L
         power: power, hasFlare: hasFlare
     )
     map.lamps.add(result)
+
+proc newBarrel*(map: Map, name: string, x, y, tox, toy = 0, model = "bar_orange"): Barrel =
+    result = Barrel(
+        name: name,
+        x: x, y: y,
+        tox: tox, toy: toy,
+        model: model
+    )
+    map.barrels.add(result)
 
 # Trigger.
 proc addAction*(trigger: Trigger, action: Action) {.inline.} =
