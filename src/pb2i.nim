@@ -113,6 +113,10 @@ type
         model*: string
         team*, level*: int
     
+    Pusher* = ref object of BaseNamedMapObject
+        w*, h*, tox*, toy*, stabilityDamage*, damage*: int
+        attachTo*: Movable
+    
     Map* = ref object
         # Addressable objects. (Ones inheriting BaseNamedMapObject)
         triggers: seq[Trigger]
@@ -125,6 +129,7 @@ type
         lamps: seq[Lamp]
         barrels: seq[Barrel]
         weapons: seq[Weapon]
+        pushers: seq[Pusher]
 
         # Unaddressable objects.
         waters: seq[Water]
@@ -301,6 +306,23 @@ proc dump*(weapon: Weapon): string =
         command = $weapon.team
     ))
 
+proc dump*(pusher: Pusher): string =
+    var attachTo = "-1"
+    if not pusher.attachTo.isNil:
+        attachTo = pusher.attachTo.name
+    result = $(<>pushf(
+        uid = pusher.name,
+        x = $pusher.x,
+        y = $pusher.y,
+        w = $pusher.w,
+        h = $pusher.h,
+        tox = $pusher.tox,
+        toy = $pusher.toy,
+        stab = $pusher.stabilityDamage,
+        damage = $pusher.damage,
+        attach = attachTo
+    ))
+
 # Constructors.
 proc newMap*(): Map =
     return Map()
@@ -430,6 +452,16 @@ proc newWeapon*(map: Map, name: string, x, y, level = 0, team = -1, model = "gun
         model: model
     )
     map.weapons.add(result)
+
+proc newPusher*(map: Map, name: string, x, y, tox, toy, stabilityDamage, damage = 0, attachTo: Movable = nil): Pusher =
+    result = Pusher(
+        name: name,
+        x: x, y: y, tox: tox, toy: toy,
+        stabilityDamage: stabilityDamage, 
+        damage: damage,
+        attachTo: attachTo
+    )
+    map.pushers.add(result)
 
 # Trigger.
 proc addAction*(trigger: Trigger, action: Action) {.inline.} =
