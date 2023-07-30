@@ -123,6 +123,10 @@ type
         hexMultiplier*, material*: string
         attachTo*: Movable
     
+    Vehicle* = ref object of BaseNamedMapObject
+        side*, tox*, toy*, hpPercent*: int
+        model*: string
+    
     Map* = ref object
         # Addressable objects. (Ones inheriting BaseNamedMapObject)
         triggers: seq[Trigger]
@@ -136,6 +140,7 @@ type
         barrels: seq[Barrel]
         weapons: seq[Weapon]
         pushers: seq[Pusher]
+        vehicles: seq[Vehicle]
 
         # Unaddressable objects.
         waters: seq[Water]
@@ -348,6 +353,17 @@ proc dump*(bg: Background): string =
         s = $bg.showShadow
     ))
 
+proc dump*(vehicle: Vehicle): string =
+    result = $(<>vehicle(
+        uid = vehicle.name,
+        x = $vehicle.x,
+        y = $vehicle.y,
+        tox = $vehicle.tox,
+        toy = $vehicle.toy,
+        side = $vehicle.side,
+        hpp = $vehicle.hpPercent
+    ))
+
 # Constructors.
 proc newMap*(): Map =
     return Map()
@@ -497,6 +513,15 @@ proc newBackground*(map: Map, x, y, texX, texY, layer = 0, hexMultiplier = "", s
         attachTo: attachTo
     )
     map.backgrounds.add(result)
+
+proc newVehicle*(map: Map, model = "veh_jeep", x, y, tox, toy = 0, side = 1, hpPercent = 100): Vehicle =
+    result = Vehicle(
+        x: x, y: y, tox: tox, toy: toy,
+        model: model,
+        side: side,
+        hpPercent: hpPercent,
+    )
+    map.vehicles.add(result)
 
 # Trigger.
 proc addAction*(trigger: Trigger, action: Action) {.inline.} =
