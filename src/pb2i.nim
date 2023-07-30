@@ -109,6 +109,10 @@ type
         model*: string
         tox*, toy*: int
     
+    Weapon* = ref object of BaseNamedMapObject
+        model*: string
+        team*, level*: int
+    
     Map* = ref object
         # Addressable objects. (Ones inheriting BaseNamedMapObject)
         triggers: seq[Trigger]
@@ -120,6 +124,7 @@ type
         songs: seq[Song]
         lamps: seq[Lamp]
         barrels: seq[Barrel]
+        weapons: seq[Weapon]
 
         # Unaddressable objects.
         waters: seq[Water]
@@ -286,6 +291,16 @@ proc dump*(barrel: Barrel): string =
         model = barrel.model
     ))
 
+proc dump*(weapon: Weapon): string =
+    result = $(<>gun(
+        uid = weapon.name,
+        x = $weapon.x,
+        y = $weapon.y,
+        model = weapon.name,
+        upg = $weapon.level,
+        command = $weapon.team
+    ))
+
 # Constructors.
 proc newMap*(): Map =
     return Map()
@@ -406,6 +421,15 @@ proc newBarrel*(map: Map, name: string, x, y, tox, toy = 0, model = "bar_orange"
         model: model
     )
     map.barrels.add(result)
+
+proc newWeapon*(map: Map, name: string, x, y, level = 0, team = -1, model = "gun_rifle"): Weapon =
+    result = Weapon(
+        name: name,
+        x: x, y: y,
+        team: team, level: level,
+        model: model
+    )
+    map.weapons.add(result)
 
 # Trigger.
 proc addAction*(trigger: Trigger, action: Action) {.inline.} =
