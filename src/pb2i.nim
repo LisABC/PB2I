@@ -117,6 +117,12 @@ type
         w*, h*, tox*, toy*, stabilityDamage*, damage*: int
         attachTo*: Movable
     
+    Background* = ref object of BaseMapObject
+        w*, h*, texX*, texY*, layer*: int
+        showShadow*: bool
+        hexMultiplier*, material*: string
+        attachTo*: Movable
+    
     Map* = ref object
         # Addressable objects. (Ones inheriting BaseNamedMapObject)
         triggers: seq[Trigger]
@@ -135,6 +141,7 @@ type
         waters: seq[Water]
         boxes: seq[Box]
         engineMarks: seq[EngineMark]
+        backgrounds: seq[Background]
 
 
 # Others
@@ -323,6 +330,24 @@ proc dump*(pusher: Pusher): string =
         attach = attachTo
     ))
 
+proc dump*(bg: Background): string =
+    var attachTo = "-1"
+    if not bg.attachTo.isNil:
+        attachTo = bg.attachTo.name
+    result = $(<>bg(
+        x = $bg.x,
+        y = $bg.y,
+        w = $bg.w,
+        h = $bg.h,
+        c = bg.hexMultiplier,
+        m = bg.material,
+        u = $bg.texX,
+        v = $bg.texY,
+        f = $bg.layer,
+        a = attachTo,
+        s = $bg.showShadow
+    ))
+
 # Constructors.
 proc newMap*(): Map =
     return Map()
@@ -462,6 +487,16 @@ proc newPusher*(map: Map, name: string, x, y, tox, toy, stabilityDamage, damage 
         attachTo: attachTo
     )
     map.pushers.add(result)
+
+proc newBackground*(map: Map, x, y, texX, texY, layer = 0, hexMultiplier = "", showShadow = true, attachTo: Movable = nil): Background =
+    result = Background(
+        x:x, y: y, texX: texX, texY: texY,
+        layer: layer,
+        hexMultiplier: hexMultiplier,
+        showShadow: showShadow,
+        attachTo: attachTo
+    )
+    map.backgrounds.add(result)
 
 # Trigger.
 proc addAction*(trigger: Trigger, action: Action) {.inline.} =
