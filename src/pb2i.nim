@@ -1,4 +1,5 @@
-import xmltree
+import std/xmltree
+import std/strtabs
 
 const
     EXOS* = "0"
@@ -22,6 +23,7 @@ type
         args*: seq[string]
 
     Trigger* = ref object of BaseNamedMapObject
+        implicitSplitting*: bool
         enabled*: bool
         maxCalls*: int
         actions*: seq[Action]
@@ -82,15 +84,20 @@ type
         scaleX*, scaleY*: int
         attachTo*: Movable
     
+    Vehicle* = ref object of BaseNamedMapObject
+        side*, tox*, toy*, hpPercent*: int
+        model*: string
+
     # Player & Enemy.
     Character* = ref object of BaseNamedMapObject
         isPlayer*: bool # We need to know if we should output player or normal enemy.
         tox*, toy*: int
         hea*, hmax*: int
         team*: int
-        side*, skin*, incar*: int
+        side*, skin*: int
         botAction*: int
         onDeath*: Trigger
+        incar*: Vehicle
     
     Song* = ref object of BaseNamedMapObject
         url*: string
@@ -122,10 +129,6 @@ type
         showShadow*: bool
         hexMultiplier*, material*: string
         attachTo*: Movable
-    
-    Vehicle* = ref object of BaseNamedMapObject
-        side*, tox*, toy*, hpPercent*: int
-        model*: string
     
     Map* = ref object
         # Addressable objects. (Ones inheriting BaseNamedMapObject)
@@ -248,6 +251,9 @@ proc dump*(character: Character): string =
     var onDeath = "-1"
     if not character.onDeath.isNil:
         onDeath = character.onDeath.name
+    var incar = "-1"
+    if not character.incar.isNil:
+        incar = character.incar.name
     var a = <>player(
         uid = character.name,
         x = $character.x,
@@ -258,7 +264,7 @@ proc dump*(character: Character): string =
         hmax = $character.hmax,
         team = $character.team,
         side = $character.side,
-        incar = $character.incar,
+        incar = incar,
         botaction = $character.botAction,
         ondeath = ondeath,
         char = $character.skin
@@ -364,6 +370,77 @@ proc dump*(vehicle: Vehicle): string =
         hpp = $vehicle.hpPercent
     ))
 
+proc chunk*(actions: seq[Action]): seq[seq[Action]] =
+    var perfectGroups = actions.len div 10
+    for i in 0..<perfectGroups:
+        result.add(actions[i*10..<i*10+10])
+    var partialActions = actions.len mod 10
+    var group = actions[^partialActions..<actions.len]
+    for i in 0..<(10-partialActions):
+        group.add(Action(opID: -1, args: @[]))
+    result.add(group)
+
+proc execute*(trigger: Trigger, target: Trigger): Action {.discardable.}
+proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger
+
+proc dump*(trigger: Trigger): string =
+    if trigger.actions.len < 11:
+        var element = newElement("trigger")
+        var attribs = {
+            "uid": trigger.name,
+            "x": $trigger.x,
+            "y": $trigger.y,
+            "enabled": $trigger.enabled,
+            "maxcalls": $trigger.maxCalls
+        }.toXmlAttributes
+        for i in 0..<10:
+            var action = Action(opID: -1, args: @[])
+            if i < trigger.actions.len:
+                action = trigger.actions[i]
+            attribs["actions_" & $(i+1) & "_type"] = $action.opID
+            var args: seq[string] = @[]
+            if action.args.len == 0:
+                args = @["0", "0"]
+            elif action.args.len == 1:
+                args = @[action.args[0], "0"]
+            else:
+                args = action.args
+            attribs["actions_" & $(i+1) & "_targetA"] = args[0]
+            attribs["actions_" & $(i+1) & "_targetB"] = args[1]
+        element.attrs = attribs
+        return $element
+
+    if not trigger.implicitSplitting:
+        raise LibraryError.newException(">10 actions in trigger that has `implicitSplitting` disabled is not allowed, but trigger " & trigger.name & " has " & $trigger.actions.len & " actions.")
+    if trigger.actions.len > 100:
+        raise LibraryError.newException("100 action is max for trigger in PB2I, sorry, trigger: " & trigger.name & ".")
+    var actionGroups = trigger.actions.chunk()
+    var subTriggers: seq[Trigger] = @[]
+
+    for index in 0..<actionGroups.len:
+        var group = actionGroups[index]
+        subTriggers.add(newTrigger(
+            name = trigger.name & "-" & $index,
+            x = trigger.x, y = trigger.y,
+            enabled = true,
+            maxCalls = -1,
+            actions = group
+        ))
+
+    var masterTrigger = newTrigger(
+        name = trigger.name,
+        x = trigger.x,
+        y = trigger.y,
+        enabled = trigger.enabled,
+        maxCalls = trigger.maxCalls
+    )
+    for st in subTriggers:
+        masterTrigger.execute(st)
+    result = masterTrigger.dump
+    for st in subTriggers:
+        result.add(st.dump)
+
+
 # Constructors.
 proc newMap*(): Map =
     return Map()
@@ -400,8 +477,9 @@ proc newTimer*(map: Map, name: string, x, y = 0, enabled = true, callback: Trigg
     )
     map.timers.add(result)
 
-proc newTrigger*(map: Map, name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[]): Trigger =
+proc newTrigger*(map: Map, name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger =
     result = Trigger(
+        implicitSplitting: implicitSplitting,
         name: name,
         x: x, y: y,
         enabled: enabled,
@@ -409,6 +487,16 @@ proc newTrigger*(map: Map, name: string, x, y = 0, enabled = true, maxCalls = 1,
         actions: actions
     )
     map.triggers.add(result)
+
+proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger =
+    result = Trigger(
+        implicitSplitting: implicitSplitting,
+        name: name,
+        x: x, y: y,
+        enabled: enabled,
+        maxCalls: maxCalls,
+        actions: actions
+    )
 
 proc newBox*(map: Map, x, y, w, h, material = 0): Box =
     result = Box(
@@ -437,15 +525,16 @@ proc newDecoration*(map: Map, name: string, x, y, texX, texY, rotation, layer = 
     )
     map.decorations.add(result)
 
-proc newCharacter*(map: Map, name: string, x, y, tox, toy = 0, hea, hmax = 130, team = 0, side = 1, skin = -1, incar = -1, botAction = 4, onDeath: Trigger = nil, isPlayer = true): Character =
+proc newCharacter*(map: Map, name: string, x, y, tox, toy = 0, hea, hmax = 130, team = 0, side = 1, skin = -1, incar: Vehicle = nil, botAction = 4, onDeath: Trigger = nil, isPlayer = true): Character =
     result = Character(
         name: name,
         x: x, y: y, tox: tox, toy: toy,
         hea: hea, hmax: hmax,
         team: team, side: side,
-        skin: skin, incar: incar, botAction: botAction,
+        skin: skin, botAction: botAction,
         onDeath: onDeath,
-        isPlayer: isPlayer
+        isPlayer: isPlayer,
+        incar: incar
     )
     map.characters.add(result)
 
@@ -554,6 +643,15 @@ proc setVariable*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable
     # Set variable 'A' to value of variable 'B'
     trigger.addAction(125, @[$pbvar1, $pbvar2])
 
+proc add*(trigger: Trigger, pbvar: PBVar, value: int): Action {.discardable.} =
+    # Add value 'B' to value of variable 'A'
+    trigger.addAction(102, @[$pbvar, $value])
+proc add*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
+    # Add value of variable 'B' to value of variable 'A'
+    trigger.addAction(104, @[$pbvar1, $pbvar2])
+proc concatenate*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
+    # Add string-value of variable 'B' at end of variable 'A'
+    trigger.addAction(152, @[$pbvar1, $pbvar2])
 
 proc generateFloatNumber*(trigger: Trigger, pbvar: PBVar, value: int): Action {.discardable.} =
     # Set variable 'A' to random floating number in range 0..B
@@ -576,3 +674,7 @@ proc sendChatMessage*(trigger: Trigger, who = EXOS, texts: varargs[string, `$`])
     for stuff in texts:
         text.add stuff
     trigger.addAction(42, @[text, who])
+
+proc execute*(trigger: Trigger, target: Trigger): Action {.discardable.} =
+    # Execute trigger 'A'
+    trigger.addAction(99, @[target.name])
