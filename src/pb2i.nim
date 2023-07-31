@@ -153,6 +153,7 @@ type
 
 
 # Others
+let DO_NOTHING = Action(opID: -1, args: @[])
 proc `$`*(pbvar: PBVar): string {.borrow.}
 
 # Dumping
@@ -371,14 +372,9 @@ proc dump*(vehicle: Vehicle): string =
     ))
 
 proc chunk*(actions: seq[Action]): seq[seq[Action]] =
-    var perfectGroups = actions.len div 10
-    for i in 0..<perfectGroups:
+    for i in 0..<(actions.len div 10):
         result.add(actions[i*10..<i*10+10])
-    var partialActions = actions.len mod 10
-    var group = actions[^partialActions..<actions.len]
-    for i in 0..<(10-partialActions):
-        group.add(Action(opID: -1, args: @[]))
-    result.add(group)
+    result.add(actions[^(actions.len mod 10)..<actions.len])
 
 proc execute*(trigger: Trigger, target: Trigger): Action {.discardable.}
 proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger
@@ -394,17 +390,13 @@ proc dump*(trigger: Trigger): string =
             "maxcalls": $trigger.maxCalls
         }.toXmlAttributes
         for i in 0..<10:
-            var action = Action(opID: -1, args: @[])
+            var action = DO_NOTHING
             if i < trigger.actions.len:
                 action = trigger.actions[i]
+            var args = action.args
+            for i in 0..<(2 - args.len):
+                args.add("")
             attribs["actions_" & $(i+1) & "_type"] = $action.opID
-            var args: seq[string] = @[]
-            if action.args.len == 0:
-                args = @["0", "0"]
-            elif action.args.len == 1:
-                args = @[action.args[0], "0"]
-            else:
-                args = action.args
             attribs["actions_" & $(i+1) & "_targetA"] = args[0]
             attribs["actions_" & $(i+1) & "_targetB"] = args[1]
         element.attrs = attribs
@@ -414,18 +406,6 @@ proc dump*(trigger: Trigger): string =
         raise LibraryError.newException(">10 actions in trigger that has `implicitSplitting` disabled is not allowed, but trigger " & trigger.name & " has " & $trigger.actions.len & " actions.")
     if trigger.actions.len > 100:
         raise LibraryError.newException("100 action is max for trigger in PB2I, sorry, trigger: " & trigger.name & ".")
-    var actionGroups = trigger.actions.chunk()
-    var subTriggers: seq[Trigger] = @[]
-
-    for index in 0..<actionGroups.len:
-        var group = actionGroups[index]
-        subTriggers.add(newTrigger(
-            name = trigger.name & "-" & $index,
-            x = trigger.x, y = trigger.y,
-            enabled = true,
-            maxCalls = -1,
-            actions = group
-        ))
 
     var masterTrigger = newTrigger(
         name = trigger.name,
@@ -434,12 +414,20 @@ proc dump*(trigger: Trigger): string =
         enabled = trigger.enabled,
         maxCalls = trigger.maxCalls
     )
-    for st in subTriggers:
-        masterTrigger.execute(st)
-    result = masterTrigger.dump
-    for st in subTriggers:
-        result.add(st.dump)
 
+    var actionGroups = trigger.actions.chunk()
+    for index in 0..<actionGroups.len:
+        var st = newTrigger(
+            name = trigger.name & "-" & $index,
+            x = trigger.x, 
+            y = trigger.y,
+            enabled = true,
+            maxCalls = -1,
+            actions = actionGroups[index]
+        )
+        masterTrigger.execute(st)
+        result.add(st.dump)
+    result.add(masterTrigger.dump)
 
 # Constructors.
 proc newMap*(): Map =
