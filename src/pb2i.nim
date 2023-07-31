@@ -394,11 +394,11 @@ proc dump*(trigger: Trigger): string =
             if i < trigger.actions.len:
                 action = trigger.actions[i]
             var args = action.args
-            for i in 0..<(2 - args.len):
-                args.add("")
             attribs["actions_" & $(i+1) & "_type"] = $action.opID
-            attribs["actions_" & $(i+1) & "_targetA"] = args[0]
-            attribs["actions_" & $(i+1) & "_targetB"] = args[1]
+            if args.len > 0:
+                attribs["actions_" & $(i+1) & "_targetA"] = args[0]
+            if args.len > 1:
+                attribs["actions_" & $(i+1) & "_targetB"] = args[1]
         element.attrs = attribs
         return $element
 
