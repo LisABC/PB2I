@@ -1,5 +1,5 @@
 #import std/with
-import src/pb2i
+import ../src/pb2i
 
 var map = newMap()
 
@@ -14,7 +14,7 @@ var trigger = map.newTrigger("#N")
 var var1 = "#var1".PBVar
 trigger.sendChatMessage(Proxy, "Hello World!")
 for i in 0..<5:
-    trigger.generateIntNumber(var1, 10)
+    trigger.randomInt(var1, 10)
     trigger.sendChatMessage(Proxy, $i, "I: ", var1)
 
 map.newTimer("#NT", callback=trigger, delay=0)
