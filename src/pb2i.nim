@@ -429,11 +429,33 @@ proc dump*(trigger: Trigger): string =
         result.add(st.dump)
     result.add(masterTrigger.dump)
 
+template strAddIteratively[T](what: seq[T]): untyped =
+    for i in what:
+        result.add(i.dump)
+
+proc dump*(map: Map): string =
+    strAddIteratively(map.regions)
+    strAddIteratively(map.pushers)
+    strAddIteratively(map.vehicles)
+    strAddIteratively(map.backgrounds)
+    strAddIteratively(map.decorations)
+    strAddIteratively(map.boxes)
+    strAddIteratively(map.engineMarks)
+    strAddIteratively(map.songs)
+    strAddIteratively(map.lamps)
+    strAddIteratively(map.barrels)
+    strAddIteratively(map.weapons)
+    strAddIteratively(map.waters)
+    strAddIteratively(map.characters)
+    strAddIteratively(map.triggers)
+    strAddIteratively(map.timers)
+    strAddIteratively(map.movables)
+
 # Constructors.
 proc newMap*(): Map =
     return Map()
 
-proc newMovable*(map: Map, name: string, x, y, w, h, tarx, tary = 0, speed = 10, visible = true, moving = false, attachTo: Movable = nil): Movable =
+proc newMovable*(map: Map, name: string, x, y, w, h, tarx, tary = 0, speed = 10, visible = true, moving = false, attachTo: Movable = nil): Movable {.discardable.} =
     result = Movable(
         name: name,
         x: x, y: y, w: w, h: h, tarx: tarx, tary: tary,
@@ -444,7 +466,7 @@ proc newMovable*(map: Map, name: string, x, y, w, h, tarx, tary = 0, speed = 10,
     )
     map.movables.add(result)
 
-proc newRegion*(map: Map, name: string, x, y, w, h = 0, actTrigger: Trigger = nil, actOn = NOTHING, attachTo: Movable = nil): Region =
+proc newRegion*(map: Map, name: string, x, y, w, h = 0, actTrigger: Trigger = nil, actOn = NOTHING, attachTo: Movable = nil): Region {.discardable.} =
     result = Region(
         name: name,
         x: x, y: y, w: w, h: h,
@@ -454,7 +476,7 @@ proc newRegion*(map: Map, name: string, x, y, w, h = 0, actTrigger: Trigger = ni
     )
     map.regions.add(result)
 
-proc newTimer*(map: Map, name: string, x, y = 0, enabled = true, callback: Trigger = nil, maxCalls = 1, delay = 30): Timer =
+proc newTimer*(map: Map, name: string, x, y = 0, enabled = true, callback: Trigger = nil, maxCalls = 1, delay = 30): Timer {.discardable.} =
     result = Timer(
         name: name,
         x: x, y: y,
@@ -465,7 +487,7 @@ proc newTimer*(map: Map, name: string, x, y = 0, enabled = true, callback: Trigg
     )
     map.timers.add(result)
 
-proc newTrigger*(map: Map, name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger =
+proc newTrigger*(map: Map, name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger {.discardable.} =
     result = Trigger(
         implicitSplitting: implicitSplitting,
         name: name,
@@ -476,7 +498,7 @@ proc newTrigger*(map: Map, name: string, x, y = 0, enabled = true, maxCalls = 1,
     )
     map.triggers.add(result)
 
-proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger =
+proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger {.discardable.} =
     result = Trigger(
         implicitSplitting: implicitSplitting,
         name: name,
@@ -486,14 +508,14 @@ proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: 
         actions: actions
     )
 
-proc newBox*(map: Map, x, y, w, h, material = 0): Box =
+proc newBox*(map: Map, x, y, w, h, material = 0): Box {.discardable.} =
     result = Box(
         x:x, y:y, w:w, h:h, 
         material: material
     )
     map.boxes.add(result)
 
-proc newWater*(map: Map, x, y, w, h, damage = 0, friction = true): Water =
+proc newWater*(map: Map, x, y, w, h, damage = 0, friction = true): Water {.discardable.} =
     result = Water(
         x: x, y: y, w: w, h: h,
         damage: damage,
@@ -501,7 +523,7 @@ proc newWater*(map: Map, x, y, w, h, damage = 0, friction = true): Water =
     )
     map.waters.add(result)
 
-proc newDecoration*(map: Map, name: string, x, y, texX, texY, rotation, layer = 0, scaleX, scaleY = 1, model = "stone", attachTo: Movable = nil): Decoration =
+proc newDecoration*(map: Map, name: string, x, y, texX, texY, rotation, layer = 0, scaleX, scaleY = 1, model = "stone", attachTo: Movable = nil): Decoration {.discardable.} =
     result = Decoration(
         name: name,
         x: x, y: y,
@@ -513,7 +535,7 @@ proc newDecoration*(map: Map, name: string, x, y, texX, texY, rotation, layer = 
     )
     map.decorations.add(result)
 
-proc newCharacter*(map: Map, name: string, x, y, tox, toy = 0, hea, hmax = 130, team = 0, side = 1, skin = -1, incar: Vehicle = nil, botAction = 4, onDeath: Trigger = nil, isPlayer = true): Character =
+proc newCharacter*(map: Map, name: string, x, y, tox, toy = 0, hea, hmax = 130, team = 0, side = 1, skin = -1, incar: Vehicle = nil, botAction = 4, onDeath: Trigger = nil, isPlayer = true): Character {.discardable.} =
     result = Character(
         name: name,
         x: x, y: y, tox: tox, toy: toy,
@@ -526,7 +548,7 @@ proc newCharacter*(map: Map, name: string, x, y, tox, toy = 0, hea, hmax = 130, 
     )
     map.characters.add(result)
 
-proc newSong*(map: Map, name: string, x, y = 0, url = "", volume = 1, loop = true, onEnd: Trigger = nil): Song =
+proc newSong*(map: Map, name: string, x, y = 0, url = "", volume = 1, loop = true, onEnd: Trigger = nil): Song {.discardable.} =
     result = Song(
         name: name,
         x: x, y:y,
@@ -537,7 +559,7 @@ proc newSong*(map: Map, name: string, x, y = 0, url = "", volume = 1, loop = tru
     )
     map.songs.add(result)
 
-proc newEngineMark*(map: Map, x, y = 0, modifier = "hero1_guns", parameter = "0"): EngineMark =
+proc newEngineMark*(map: Map, x, y = 0, modifier = "hero1_guns", parameter = "0"): EngineMark {.discardable.} =
     result = EngineMark(
         x: x, y: y,
         modifier: modifier,
@@ -545,7 +567,7 @@ proc newEngineMark*(map: Map, x, y = 0, modifier = "hero1_guns", parameter = "0"
     )
     map.engineMarks.add(result)
 
-proc newLamp*(map: Map, name: string, x, y = 0, power = 0.4, hasFlare = true): Lamp =
+proc newLamp*(map: Map, name: string, x, y = 0, power = 0.4, hasFlare = true): Lamp {.discardable.} =
     result = Lamp(
         name: name,
         x: x, y: y,
@@ -553,7 +575,7 @@ proc newLamp*(map: Map, name: string, x, y = 0, power = 0.4, hasFlare = true): L
     )
     map.lamps.add(result)
 
-proc newBarrel*(map: Map, name: string, x, y, tox, toy = 0, model = "bar_orange"): Barrel =
+proc newBarrel*(map: Map, name: string, x, y, tox, toy = 0, model = "bar_orange"): Barrel {.discardable.} =
     result = Barrel(
         name: name,
         x: x, y: y,
@@ -562,7 +584,7 @@ proc newBarrel*(map: Map, name: string, x, y, tox, toy = 0, model = "bar_orange"
     )
     map.barrels.add(result)
 
-proc newWeapon*(map: Map, name: string, x, y, level = 0, team = -1, model = "gun_rifle"): Weapon =
+proc newWeapon*(map: Map, name: string, x, y, level = 0, team = -1, model = "gun_rifle"): Weapon {.discardable.} =
     result = Weapon(
         name: name,
         x: x, y: y,
@@ -571,7 +593,7 @@ proc newWeapon*(map: Map, name: string, x, y, level = 0, team = -1, model = "gun
     )
     map.weapons.add(result)
 
-proc newPusher*(map: Map, name: string, x, y, tox, toy, stabilityDamage, damage = 0, attachTo: Movable = nil): Pusher =
+proc newPusher*(map: Map, name: string, x, y, tox, toy, stabilityDamage, damage = 0, attachTo: Movable = nil): Pusher {.discardable.} =
     result = Pusher(
         name: name,
         x: x, y: y, tox: tox, toy: toy,
@@ -581,7 +603,7 @@ proc newPusher*(map: Map, name: string, x, y, tox, toy, stabilityDamage, damage 
     )
     map.pushers.add(result)
 
-proc newBackground*(map: Map, x, y, texX, texY, layer = 0, hexMultiplier = "", showShadow = true, attachTo: Movable = nil): Background =
+proc newBackground*(map: Map, x, y, texX, texY, layer = 0, hexMultiplier = "", showShadow = true, attachTo: Movable = nil): Background {.discardable.} =
     result = Background(
         x:x, y: y, texX: texX, texY: texY,
         layer: layer,
@@ -591,7 +613,7 @@ proc newBackground*(map: Map, x, y, texX, texY, layer = 0, hexMultiplier = "", s
     )
     map.backgrounds.add(result)
 
-proc newVehicle*(map: Map, model = "veh_jeep", x, y, tox, toy = 0, side = 1, hpPercent = 100): Vehicle =
+proc newVehicle*(map: Map, model = "veh_jeep", x, y, tox, toy = 0, side = 1, hpPercent = 100): Vehicle {.discardable.} =
     result = Vehicle(
         x: x, y: y, tox: tox, toy: toy,
         model: model,
@@ -641,17 +663,16 @@ proc concatenate*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable
     # Add string-value of variable 'B' at end of variable 'A'
     trigger.addAction(152, @[$pbvar1, $pbvar2])
 
-proc generateFloatNumber*(trigger: Trigger, pbvar: PBVar, value: int): Action {.discardable.} =
+proc randomFloat*(trigger: Trigger, pbvar: PBVar, value: float): Action {.discardable.} =
     # Set variable 'A' to random floating number in range 0..B
     trigger.addAction(106, @[$pbvar, $value])
-proc generateFloatNumber*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
+proc randomFloat*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
     # Set variable 'A' to random floating number in range 0..X where X is variable
     trigger.addAction(327, @[$pbvar1, $pbvar2])
-
-proc generateIntNumber*(trigger: Trigger, pbvar: PBVar, value: int): Action {.discardable.} =
+proc randomInt*(trigger: Trigger, pbvar: PBVar, value: int): Action {.discardable.} =
     # Set variable 'A' to random integer number in range 0..B-1
     trigger.addAction(107, @[$pbvar, $value])
-proc generateIntNumber*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
+proc randomInt*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
     # Set variable 'A' to random integer number in range 0..X-1 where X is variable
     trigger.addAction(328, @[$pbvar1, $pbvar2])
 
