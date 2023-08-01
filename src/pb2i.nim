@@ -407,10 +407,15 @@ proc dump*(trigger: Trigger): string =
     if trigger.actions.len > (9 * 2048):
         raise LibraryError.newException("9 * 2048 action is max for trigger in PB2I, sorry, trigger: " & trigger.name & ".")
 
-    
     var triggers: seq[Trigger]
     var actionGroups = trigger.actions.chunk()
-
+    for group in actionGroups:
+        if group.len == 0:
+            continue
+        if group[^1].opID == 123:
+            raise LibraryError.newException("An 'Skip next trigger' action is in end of trigger `" & trigger.name & "`, please fix this yourself")
+    if actionGroups[^1].len == 0:
+        discard actionGroups.pop
     triggers.add(newTrigger(
         name = trigger.name,
         x = trigger.x,
