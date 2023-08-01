@@ -132,24 +132,24 @@ type
     
     Map* = ref object
         # Addressable objects. (Ones inheriting BaseNamedMapObject)
-        triggers: seq[Trigger]
-        timers: seq[Timer]
-        characters: seq[Character]
-        movables: seq[Movable]
-        decorations: seq[Decoration]
-        regions: seq[Region]
-        songs: seq[Song]
-        lamps: seq[Lamp]
-        barrels: seq[Barrel]
-        weapons: seq[Weapon]
-        pushers: seq[Pusher]
-        vehicles: seq[Vehicle]
+        triggers*: seq[Trigger]
+        timers*: seq[Timer]
+        characters*: seq[Character]
+        movables*: seq[Movable]
+        decorations*: seq[Decoration]
+        regions*: seq[Region]
+        songs*: seq[Song]
+        lamps*: seq[Lamp]
+        barrels*: seq[Barrel]
+        weapons*: seq[Weapon]
+        pushers*: seq[Pusher]
+        vehicles*: seq[Vehicle]
 
         # Unaddressable objects.
-        waters: seq[Water]
-        boxes: seq[Box]
-        engineMarks: seq[EngineMark]
-        backgrounds: seq[Background]
+        waters*: seq[Water]
+        boxes*: seq[Box]
+        engineMarks*: seq[EngineMark]
+        backgrounds*: seq[Background]
 
 
 # Others
@@ -687,3 +687,52 @@ proc sendChatMessage*(trigger: Trigger, who = EXOS, texts: varargs[string, `$`])
 proc execute*(trigger: Trigger, target: Trigger): Action {.discardable.} =
     # Execute trigger 'A'
     trigger.addAction(99, @[target.name])
+
+proc activate*(trigger: Trigger, target: Timer): Action {.discardable.} =
+    # Activate timer 'A'
+    trigger.addAction(25, @[target.name])
+proc deactivate*(trigger: Trigger, target: Timer): Action {.discardable.} =
+    # Deactivate timer 'A'
+    trigger.addAction(26, @[target.name])
+
+proc sendRequest*(trigger: Trigger, url: PBVar, resp: PBVar): Action {.discardable.} =
+    # Request webpage in variable 'A' and save response to variable 'B'
+    trigger.addAction(169, @[$url, $resp])
+
+proc continueEquals*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
+    # Continue execution only if variable 'A' equals to value 'B'
+    trigger.addAction(116, @[$var1, value])
+proc continueEquals*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    # Continue execution only if variable 'A' equals to variable 'B'
+    trigger.addAction(112, @[$var1, $var2])
+
+proc continueNotEquals*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
+    # Continue execution only if variable 'A' is not equal to value 'B'
+    trigger.addAction(117, @[$var1, value])
+proc continueNotEquals*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    # Continue execution only if variable 'A' is not equal to variable 'B'
+    trigger.addAction(113, @[$var1, $var2])
+
+proc replaceVars*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    # Replace variables in string-value of variable 'B' with their value and save into variable 'A'
+    trigger.addAction(325, @[$var1, $var2])
+proc replaceVars*(trigger: Trigger, var1: PBVar, value: varargs[string, `$`]): Action {.discardable.} =
+    # Replace variables in string-value 'B' with their value and save into variable 'A'
+    var B = ""
+    for i in value:
+        B.add i
+    trigger.addAction(326, @[$var1, B])
+
+proc contains*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
+    # Set variable 'A' to 1 if variable 'A' contains string-value 'B', set to 0 in else case
+    trigger.addAction(149, @[$var1, value])
+proc contains*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    # Set variable 'A' to 1 if variable 'A' contains string-value of variable 'B', set to 0 in else case
+    trigger.addAction(150, @[$var1, $var2])
+
+proc doNothing*(trigger: Trigger): Action {.discardable.} =
+    trigger.addAction(DO_NOTHING)
+
+proc switchLevel*(trigger: Trigger, map_id: string): Action {.discardable.} =
+    # Complete mission and switch to level id 'A'
+    trigger.addAction(50, @[map_id])
