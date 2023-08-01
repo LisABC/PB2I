@@ -503,7 +503,7 @@ proc newTrigger*(map: Map, name: string, x, y = 0, enabled = true, maxCalls = 1,
     )
     map.triggers.add(result)
 
-proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger {.discardable.} =
+proc newTrigger(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger {.discardable.} =
     result = Trigger(
         implicitSplitting: implicitSplitting,
         name: name,
@@ -741,3 +741,34 @@ proc doNothing*(trigger: Trigger): Action {.discardable.} =
 proc switchLevel*(trigger: Trigger, map_id: string): Action {.discardable.} =
     # Complete mission and switch to level id 'A'
     trigger.addAction(50, @[map_id])
+
+proc getCurrent*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
+    # Set value of variable 'A' to current player slot
+    trigger.addAction(137, @[$var1])
+proc getInitiator*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
+    # Set value of variable 'A' to slot of player-initiator
+    trigger.addAction(180, @[$var1])
+proc getKiller*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
+    # Set value of variable 'A' to slot of player-killer
+    trigger.addAction(181, @[$var1])
+proc getTalker*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
+    # Set value of variable 'A' to slot of player-talker
+    trigger.addAction(159, @[$var1])
+
+proc getLogin*(trigger: Trigger, var1: PBVar, slot: int): Action {.discardable.} =
+    # Set value of variable 'A' to login of player slot 'B'
+    trigger.addAction(184, @[$var1, $slot])
+proc getLogin*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    # Set value of variable 'A' to login of player slot of variable 'B'
+    trigger.addAction(187, @[$var1, $var2])
+
+proc getDisplay*(trigger: Trigger, var1: PBVar, slot: int): Action {.discardable.} =
+    # Set value of variable 'A' to login of player slot 'B'
+    trigger.addAction(185, @[$var1, $slot])
+proc getDisplay*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    # Set value of variable 'A' to login of player slot of variable 'B'
+    trigger.addAction(188, @[$var1, $var2])
+
+proc skipIfNotEquals*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
+    # Skip next trigger action if variable 'A' doesnt equal to value 'B'
+    trigger.addAction(123, @[$var1, $value])
