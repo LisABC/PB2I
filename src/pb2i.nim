@@ -372,9 +372,9 @@ proc dump*(vehicle: Vehicle): string =
     ))
 
 proc chunk*(actions: seq[Action]): seq[seq[Action]] =
-    for i in 0..<(actions.len div 10):
-        result.add(actions[i*10..<i*10+10])
-    result.add(actions[^(actions.len mod 10)..<actions.len])
+    for i in 0..<(actions.len div 9):
+        result.add(actions[i*9..<i*9+9])
+    result.add(actions[^(actions.len mod 9)..<actions.len])
 
 proc execute*(trigger: Trigger, target: Trigger): Action {.discardable.}
 proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger
@@ -407,27 +407,32 @@ proc dump*(trigger: Trigger): string =
     if trigger.actions.len > 100:
         raise LibraryError.newException("100 action is max for trigger in PB2I, sorry, trigger: " & trigger.name & ".")
 
-    var masterTrigger = newTrigger(
+    
+    var triggers: seq[Trigger]
+    var actionGroups = trigger.actions.chunk()
+
+    triggers.add(newTrigger(
         name = trigger.name,
         x = trigger.x,
         y = trigger.y,
         enabled = trigger.enabled,
-        maxCalls = trigger.maxCalls
-    )
-
-    var actionGroups = trigger.actions.chunk()
-    for index in 0..<actionGroups.len:
+        maxCalls = trigger.maxCalls,
+        actions = actionGroups[0]
+    ))
+    for index in 1..<actionGroups.len:
         var st = newTrigger(
             name = trigger.name & "-" & $index,
-            x = trigger.x, 
+            x = trigger.x,
             y = trigger.y,
             enabled = true,
             maxCalls = -1,
             actions = actionGroups[index]
         )
-        masterTrigger.execute(st)
-        result.add(st.dump)
-    result.add(masterTrigger.dump)
+        triggers[^1].execute(st)
+        triggers.add(st)
+    for trigger in triggers:
+        result.add trigger.dump
+
 
 template strAddIteratively[T](what: seq[T]): untyped =
     for i in what:
