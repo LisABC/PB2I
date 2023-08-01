@@ -105,6 +105,37 @@ type
         loop*: bool
         onEnd*: Trigger
     
+    # Engine mark.
+    EngineMarks* = enum
+        CHANGE_SKY = "sky"
+        SHADOW_MAP_SIZE = "shadowmap_size"
+        CASUAL_MODE = "casual"
+        NO_BASE_NOISE = "nobase"
+        ALT_GAME = "game2"
+        STRICT_CASUAL_MODE = "strict_casual"
+        NO_AUTO_REVIVE = "no_auto_revive"
+        FORCE_RAGDOLL_DISAPPEARMENT = "meat"
+        MARINE_WEAPONS = "hero1_guns"
+        PROXY_WEAPONS = "hero2_guns"
+        PROXY_WEAPONS_NO_NADE = "hero2_guns_nonades"
+        PROXY_WEAPONS_ONLY_NADES = "hero2_guns_nades"
+        NO_PSI = "nopsi"
+        GAME_SCALE = "gamescale"
+        HE_NADES_COUNT = "he_nades_count"
+        PORT_NADES_COUNT = "port_nades_count"
+        SH_NADES_COUNT = "sh_nades_count"
+        SNOW = "snow"
+        WATER_COLOR = "watercolor"
+        ACID_COLOR = "acidcolor"
+        WATER_TITLE = "watertitle"
+        ACIDT_ITLE = "acidtitle"
+        SLOTS_ON_SPAWN = "dm_slots_on_spawn"
+        MAX_GUNS_ON_SPAWN = "dm_max_guns_on_spawn"
+        TRIGGER_ERROR_REPORTING = "level_errors"
+        VAR_SYNC_ACTIONS = "var_sync"
+        NO_LIGHT_BREAK = "no_light_break"
+        NAIVE_HIT_CONFIRMATION = "naive_hit_confirmation"
+
     EngineMark* = ref object of BaseMapObject
         modifier*, parameter*: string
     
@@ -785,3 +816,30 @@ proc registerChatListener*(trigger: Trigger, listener: Trigger): Action {.discar
 proc getMessage*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
     # Set string-value of variable 'A' to text being said
     trigger.addAction(160, @[$var1])
+
+proc variableCheck(var1: PBVar) =
+    for i in ['#', '&', ';', '|', '=']:
+        if i in $var1:
+            echo "[PB2I]: Variable ", $var1, " contains reserved character: ", i, ". You cannot synchronize this variable."
+
+proc sync*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
+    # Synchronize value of variable 'A' overriding value
+    variableCheck(var1)
+    trigger.addAction(223, @[$var1])
+proc syncDefined*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
+    # Synchronize value of variable 'A' by defined value
+    variableCheck(var1)
+    trigger.addAction(224, @[$var1])
+proc syncMax*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
+    # Synchronize value of variable 'A' by maximum value
+    variableCheck(var1)
+    trigger.addAction(225, @[$var1])
+proc syncMin*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
+    # Synchronize value of variable 'A' by minimum value
+    variableCheck(var1)
+    trigger.addAction(226, @[$var1])
+proc syncLongest*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
+    # Synchronize value of variable 'A' by longest string value
+    variableCheck(var1)
+    trigger.addAction(227, @[$var1])
+
