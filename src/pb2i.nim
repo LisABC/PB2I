@@ -772,3 +772,11 @@ proc getDisplay*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
 proc skipIfNotEquals*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
     # Skip next trigger action if variable 'A' doesnt equal to value 'B'
     trigger.addAction(123, @[$var1, $value])
+
+proc registerChatListener*(trigger: Trigger, listener: Trigger): Action {.discardable.} =
+    # Set trigger 'A' as player chat message receiver
+    trigger.addAction(156, @[listener.name])
+
+proc getMessage*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
+    # Set string-value of variable 'A' to text being said
+    trigger.addAction(160, @[$var1])
