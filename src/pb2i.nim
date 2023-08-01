@@ -404,8 +404,8 @@ proc dump*(trigger: Trigger): string =
 
     if not trigger.implicitSplitting:
         raise LibraryError.newException(">10 actions in trigger that has `implicitSplitting` disabled is not allowed, but trigger " & trigger.name & " has " & $trigger.actions.len & " actions.")
-    if trigger.actions.len > 100:
-        raise LibraryError.newException("100 action is max for trigger in PB2I, sorry, trigger: " & trigger.name & ".")
+    if trigger.actions.len > (9 * 2048):
+        raise LibraryError.newException("9 * 2048 action is max for trigger in PB2I, sorry, trigger: " & trigger.name & ".")
 
     
     var triggers: seq[Trigger]
