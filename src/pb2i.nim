@@ -139,7 +139,8 @@ type
         NAIVE_HIT_CONFIRMATION = "naive_hit_confirmation"
 
     EngineMark* = ref object of BaseMapObject
-        modifier*, parameter*: string
+        modifier*: EngineMarks
+        parameter*: string
     
     Lamp* = ref object of BaseNamedMapObject
         power*: float
@@ -325,7 +326,7 @@ proc dump*(engineMark: EngineMark): string =
     result = $(<>inf(
         x = $engineMark.x,
         y = $engineMark.y,
-        mark = engineMark.modifier,
+        mark = $engineMark.modifier,
         forteam = engineMark.parameter
     ))
 
@@ -602,7 +603,7 @@ proc newSong*(map: Map, name: string, x, y = 0, url = "", volume = 1, loop = tru
     )
     map.songs.add(result)
 
-proc newEngineMark*(map: Map, x, y = 0, modifier = "hero1_guns", parameter = "0"): EngineMark {.discardable.} =
+proc newEngineMark*(map: Map, x, y = 0, modifier = EngineMarks.MARINE_WEAPONS, parameter = "0"): EngineMark {.discardable.} =
     result = EngineMark(
         x: x, y: y,
         modifier: modifier,
