@@ -1,6 +1,8 @@
 import std/xmltree
 import std/strtabs
 
+{.push warning[ImplicitDefaultValue]: off.}
+
 const
     EXOS* = "0"
     HERO* = "1"
@@ -843,3 +845,5 @@ proc syncLongest*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
     variableCheck(var1)
     trigger.addAction(227, @[$var1])
 
+
+{.pop.}
