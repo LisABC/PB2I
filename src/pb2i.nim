@@ -164,7 +164,7 @@ type
         hexMultiplier*, material*: string
         attachTo*: Movable
     
-    Map* = ref object
+    Map* = ref object ## Object that holds everything.
         # Addressable objects. (Ones inheriting BaseNamedMapObject)
         triggers*: seq[Trigger]
         timers*: seq[Timer]
@@ -188,10 +188,11 @@ type
 
 # Others
 let DO_NOTHING = Action(opID: -1, args: @[])
-proc `$`*(pbvar: PBVar): string {.borrow.}
+proc `$`*(pbvar: PBVar): string {.borrow.} ## Gives name of `pbvar`.
 
 # Dumping
 proc dump*(movable: Movable): string =
+    ## Dumps movable.
     var attachTo = "-1"
     if not movable.attachTo.isNil:
         attachTo = movable.attachTo.name
@@ -211,6 +212,7 @@ proc dump*(movable: Movable): string =
     ))
 
 proc dump*(region: Region): string =
+    ## Dumps region.
     var attachTo = "-1"
     if not region.attachTo.isNil:
         attachTo = region.attachTo.name
@@ -231,6 +233,7 @@ proc dump*(region: Region): string =
     ))
 
 proc dump*(timer: Timer): string =
+    ## Dumps timer.
     var callback = "-1"
     if not timer.callback.isNil:
         callback = timer.callback.name
@@ -246,6 +249,7 @@ proc dump*(timer: Timer): string =
     ))
 
 proc dump*(box: Box): string =
+    ## Dumps wall.
     return $(<>box(
         x = $box.x,
         y = $box.y,
@@ -255,6 +259,7 @@ proc dump*(box: Box): string =
     ))
 
 proc dump*(water: Water): string =
+    ## Dumps water.
     return $(<>water(
         x = $water.x,
         y = $water.y,
@@ -265,6 +270,7 @@ proc dump*(water: Water): string =
     ))
 
 proc dump*(decor: Decoration): string =
+    ## Dumps decoration.
     var attachTo = "-1"
     if not decor.attachTo.isNil:
         attachTo = decor.attachTo.name
@@ -283,6 +289,7 @@ proc dump*(decor: Decoration): string =
     ))
 
 proc dump*(character: Character): string =
+    ## Dumps character.
     var onDeath = "-1"
     if not character.onDeath.isNil:
         onDeath = character.onDeath.name
@@ -309,6 +316,7 @@ proc dump*(character: Character): string =
     return $a
 
 proc dump*(song: Song): string =
+    ## Dumps song.
     var callback = "-1"
     if not song.onEnd.isNil:
         callback = song.onEnd.name
@@ -323,6 +331,7 @@ proc dump*(song: Song): string =
     ))
 
 proc dump*(engineMark: EngineMark): string =
+    ## Dumps engine mark.
     result = $(<>inf(
         x = $engineMark.x,
         y = $engineMark.y,
@@ -331,6 +340,7 @@ proc dump*(engineMark: EngineMark): string =
     ))
 
 proc dump*(lamp: Lamp): string =
+    ## Dumps lamp.
     result = $(<>lamp(
         uid = lamp.name,
         x = $lamp.x,
@@ -340,6 +350,7 @@ proc dump*(lamp: Lamp): string =
     ))
 
 proc dump*(barrel: Barrel): string =
+    ## Dumps barrel.
     result = $(<>barrel(
         uid = barrel.name,
         x = $barrel.x,
@@ -350,6 +361,7 @@ proc dump*(barrel: Barrel): string =
     ))
 
 proc dump*(weapon: Weapon): string =
+    ## Dumps weapon.
     result = $(<>gun(
         uid = weapon.name,
         x = $weapon.x,
@@ -360,6 +372,7 @@ proc dump*(weapon: Weapon): string =
     ))
 
 proc dump*(pusher: Pusher): string =
+    ## Dumps pusher.
     var attachTo = "-1"
     if not pusher.attachTo.isNil:
         attachTo = pusher.attachTo.name
@@ -377,6 +390,7 @@ proc dump*(pusher: Pusher): string =
     ))
 
 proc dump*(bg: Background): string =
+    ## Dumps background.
     var attachTo = "-1"
     if not bg.attachTo.isNil:
         attachTo = bg.attachTo.name
@@ -395,6 +409,7 @@ proc dump*(bg: Background): string =
     ))
 
 proc dump*(vehicle: Vehicle): string =
+    ## Dumps vehicle.
     result = $(<>vehicle(
         uid = vehicle.name,
         x = $vehicle.x,
@@ -405,7 +420,7 @@ proc dump*(vehicle: Vehicle): string =
         hpp = $vehicle.hpPercent
     ))
 
-proc chunk*(actions: seq[Action]): seq[seq[Action]] =
+proc chunk(actions: seq[Action]): seq[seq[Action]] =
     for i in 0..<(actions.len div 9):
         result.add(actions[i*9..<i*9+9])
     result.add(actions[^(actions.len mod 9)..<actions.len])
@@ -414,6 +429,7 @@ proc execute*(trigger: Trigger, target: Trigger): Action {.discardable.}
 proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger
 
 proc dump*(trigger: Trigger): string =
+    ## Dumps trigger. The output will be either 1 trigger or 2+ trigger depending on actions the trigger holds.
     if trigger.actions.len < 11:
         var element = newElement("trigger")
         var attribs = {
@@ -478,6 +494,7 @@ template strAddIteratively[T](what: seq[T]): untyped =
         result.add(i.dump)
 
 proc dump*(map: Map): string =
+    ## Dumps every single object the `map` holds.
     strAddIteratively(map.regions)
     strAddIteratively(map.pushers)
     strAddIteratively(map.vehicles)
@@ -497,9 +514,11 @@ proc dump*(map: Map): string =
 
 # Constructors.
 proc newMap*(): Map =
+    ## Creates new map object which you use to create objects. 
     return Map()
 
 proc newMovable*(map: Map, name: string, x, y, w, h, tarx, tary = 0, speed = 10, visible = true, moving = false, attachTo: Movable = nil): Movable {.discardable.} =
+    ## Creates new movable.
     result = Movable(
         name: name,
         x: x, y: y, w: w, h: h, tarx: tarx, tary: tary,
@@ -511,6 +530,7 @@ proc newMovable*(map: Map, name: string, x, y, w, h, tarx, tary = 0, speed = 10,
     map.movables.add(result)
 
 proc newRegion*(map: Map, name: string, x, y, w, h = 0, actTrigger: Trigger = nil, actOn = NOTHING, attachTo: Movable = nil): Region {.discardable.} =
+    ## Creates new region.
     result = Region(
         name: name,
         x: x, y: y, w: w, h: h,
@@ -521,6 +541,7 @@ proc newRegion*(map: Map, name: string, x, y, w, h = 0, actTrigger: Trigger = ni
     map.regions.add(result)
 
 proc newTimer*(map: Map, name: string, x, y = 0, enabled = true, callback: Trigger = nil, maxCalls = 1, delay = 30): Timer {.discardable.} =
+    ## Creates new timer.
     result = Timer(
         name: name,
         x: x, y: y,
@@ -532,6 +553,7 @@ proc newTimer*(map: Map, name: string, x, y = 0, enabled = true, callback: Trigg
     map.timers.add(result)
 
 proc newTrigger*(map: Map, name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger {.discardable.} =
+    ## Creates new trigger.
     result = Trigger(
         implicitSplitting: implicitSplitting,
         name: name,
@@ -553,6 +575,7 @@ proc newTrigger(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: s
     )
 
 proc newBox*(map: Map, x, y, w, h, material = 0): Box {.discardable.} =
+    ## Creates new wall.
     result = Box(
         x:x, y:y, w:w, h:h, 
         material: material
@@ -560,6 +583,7 @@ proc newBox*(map: Map, x, y, w, h, material = 0): Box {.discardable.} =
     map.boxes.add(result)
 
 proc newWater*(map: Map, x, y, w, h, damage = 0, friction = true): Water {.discardable.} =
+    ## Creates new water.
     result = Water(
         x: x, y: y, w: w, h: h,
         damage: damage,
@@ -568,6 +592,7 @@ proc newWater*(map: Map, x, y, w, h, damage = 0, friction = true): Water {.disca
     map.waters.add(result)
 
 proc newDecoration*(map: Map, name: string, x, y, texX, texY, rotation, layer = 0, scaleX, scaleY = 1, model = "stone", attachTo: Movable = nil): Decoration {.discardable.} =
+    ## Creates new decoration.
     result = Decoration(
         name: name,
         x: x, y: y,
@@ -580,6 +605,7 @@ proc newDecoration*(map: Map, name: string, x, y, texX, texY, rotation, layer = 
     map.decorations.add(result)
 
 proc newCharacter*(map: Map, name: string, x, y, tox, toy = 0, hea, hmax = 130, team = 0, side = 1, skin = -1, incar: Vehicle = nil, botAction = 4, onDeath: Trigger = nil, isPlayer = true): Character {.discardable.} =
+    ## Creates new character.
     result = Character(
         name: name,
         x: x, y: y, tox: tox, toy: toy,
@@ -593,6 +619,7 @@ proc newCharacter*(map: Map, name: string, x, y, tox, toy = 0, hea, hmax = 130, 
     map.characters.add(result)
 
 proc newSong*(map: Map, name: string, x, y = 0, url = "", volume = 1, loop = true, onEnd: Trigger = nil): Song {.discardable.} =
+    ## Creates new song.
     result = Song(
         name: name,
         x: x, y:y,
@@ -604,6 +631,7 @@ proc newSong*(map: Map, name: string, x, y = 0, url = "", volume = 1, loop = tru
     map.songs.add(result)
 
 proc newEngineMark*(map: Map, x, y = 0, modifier = EngineMarks.MARINE_WEAPONS, parameter = "0"): EngineMark {.discardable.} =
+    ## Creates new engine mark.
     result = EngineMark(
         x: x, y: y,
         modifier: modifier,
@@ -612,6 +640,7 @@ proc newEngineMark*(map: Map, x, y = 0, modifier = EngineMarks.MARINE_WEAPONS, p
     map.engineMarks.add(result)
 
 proc newLamp*(map: Map, name: string, x, y = 0, power = 0.4, hasFlare = true): Lamp {.discardable.} =
+    ## Creates new lamp.
     result = Lamp(
         name: name,
         x: x, y: y,
@@ -620,6 +649,7 @@ proc newLamp*(map: Map, name: string, x, y = 0, power = 0.4, hasFlare = true): L
     map.lamps.add(result)
 
 proc newBarrel*(map: Map, name: string, x, y, tox, toy = 0, model = "bar_orange"): Barrel {.discardable.} =
+    ## Creates new barrel.
     result = Barrel(
         name: name,
         x: x, y: y,
@@ -629,6 +659,7 @@ proc newBarrel*(map: Map, name: string, x, y, tox, toy = 0, model = "bar_orange"
     map.barrels.add(result)
 
 proc newWeapon*(map: Map, name: string, x, y, level = 0, team = -1, model = "gun_rifle"): Weapon {.discardable.} =
+    ## Creates new weapon.
     result = Weapon(
         name: name,
         x: x, y: y,
@@ -638,6 +669,7 @@ proc newWeapon*(map: Map, name: string, x, y, level = 0, team = -1, model = "gun
     map.weapons.add(result)
 
 proc newPusher*(map: Map, name: string, x, y, tox, toy, stabilityDamage, damage = 0, attachTo: Movable = nil): Pusher {.discardable.} =
+    ## Creates new pusher.
     result = Pusher(
         name: name,
         x: x, y: y, tox: tox, toy: toy,
@@ -648,6 +680,7 @@ proc newPusher*(map: Map, name: string, x, y, tox, toy, stabilityDamage, damage 
     map.pushers.add(result)
 
 proc newBackground*(map: Map, x, y, texX, texY, layer = 0, hexMultiplier = "", showShadow = true, attachTo: Movable = nil): Background {.discardable.} =
+    ## Creates new background.
     result = Background(
         x:x, y: y, texX: texX, texY: texY,
         layer: layer,
@@ -658,6 +691,7 @@ proc newBackground*(map: Map, x, y, texX, texY, layer = 0, hexMultiplier = "", s
     map.backgrounds.add(result)
 
 proc newVehicle*(map: Map, model = "veh_jeep", x, y, tox, toy = 0, side = 1, hpPercent = 100): Vehicle {.discardable.} =
+    ## Creates new vehicle.
     result = Vehicle(
         x: x, y: y, tox: tox, toy: toy,
         model: model,
@@ -668,156 +702,158 @@ proc newVehicle*(map: Map, model = "veh_jeep", x, y, tox, toy = 0, side = 1, hpP
 
 # Trigger.
 proc addAction*(trigger: Trigger, action: Action) {.inline.} =
+    ## Adds action to `trigger.actions`
     trigger.actions.add(action)
 proc addAction*(trigger: Trigger, opID: int, args: seq[string]): Action {.discardable.} =
+    ## Makes action with `opID` and `args` and then adds it to `trigger.actions`
     result = Action(opID: opID, args: args)
     trigger.actions.add(result)
 
 
 proc move*(trigger: Trigger, mov: Movable, reg: Region): Action {.discardable.} =
-    # Move movable 'A' to region 'B'
+    ## Move movable 'A' to region 'B'
     trigger.addAction(0, @[mov.name, reg.name])
 proc move*(trigger: Trigger, reg1, reg2: Region): Action {.discardable.} =
-    # Move region 'A' to region 'B'
+    ## Move region 'A' to region 'B'
     trigger.addAction(2, @[reg1.name, reg2.name])
 
 
 proc changeSpeed*(trigger: Trigger, mov: Movable, value: int): Action {.discardable.} =
-    # Change movable 'A' speed to value 'B'
+    ## Change movable 'A' speed to value 'B'
     trigger.addAction(1, @[mov.name, $value])
 
 
 proc setVariable*(trigger: Trigger, pbvar: PBVar, value: string): Action {.discardable.} =
-    # Set variable 'A' to value 'B'
+    ## Set variable 'A' to value 'B'
     trigger.addAction(100, @[$pbvar, value])
 proc setVariableIfUndefined*(trigger: Trigger, pbvar1: PBVar, value: string): Action {.discardable.} =
-    # Set variable 'A' to value 'B' if variable 'A' is not defined
+    ## Set variable 'A' to value 'B' if variable 'A' is not defined
     trigger.addAction(101, @[$pbvar1, value])
 proc setVariable*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
-    # Set variable 'A' to value of variable 'B'
+    ## Set variable 'A' to value of variable 'B'
     trigger.addAction(125, @[$pbvar1, $pbvar2])
 
 proc add*(trigger: Trigger, pbvar: PBVar, value: int): Action {.discardable.} =
-    # Add value 'B' to value of variable 'A'
+    ## Add value 'B' to value of variable 'A'
     trigger.addAction(102, @[$pbvar, $value])
 proc add*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
-    # Add value of variable 'B' to value of variable 'A'
+    ## Add value of variable 'B' to value of variable 'A'
     trigger.addAction(104, @[$pbvar1, $pbvar2])
 proc concatenate*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
-    # Add string-value of variable 'B' at end of variable 'A'
+    ## Add string-value of variable 'B' at end of variable 'A'
     trigger.addAction(152, @[$pbvar1, $pbvar2])
 
 proc randomFloat*(trigger: Trigger, pbvar: PBVar, value: float): Action {.discardable.} =
-    # Set variable 'A' to random floating number in range 0..B
+    ## Set variable 'A' to random floating number in range 0..B
     trigger.addAction(106, @[$pbvar, $value])
 proc randomFloat*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
-    # Set variable 'A' to random floating number in range 0..X where X is variable
+    ## Set variable 'A' to random floating number in range 0..X where X is variable
     trigger.addAction(327, @[$pbvar1, $pbvar2])
 proc randomInt*(trigger: Trigger, pbvar: PBVar, value: int): Action {.discardable.} =
-    # Set variable 'A' to random integer number in range 0..B-1
+    ## Set variable 'A' to random integer number in range 0..B-1
     trigger.addAction(107, @[$pbvar, $value])
 proc randomInt*(trigger: Trigger, pbvar1, pbvar2: PBVar): Action {.discardable.} =
-    # Set variable 'A' to random integer number in range 0..X-1 where X is variable
+    ## Set variable 'A' to random integer number in range 0..X-1 where X is variable
     trigger.addAction(328, @[$pbvar1, $pbvar2])
 
 
 proc sendChatMessage*(trigger: Trigger, who = EXOS, texts: varargs[string, `$`]): Action {.discardable.} =
-    # Show text 'A' in chat with color 'B'
+    ## Show text 'A' in chat with color 'B'
     var text = ""
     for stuff in texts:
         text.add stuff
     trigger.addAction(42, @[text, who])
 
 proc execute*(trigger: Trigger, target: Trigger): Action {.discardable.} =
-    # Execute trigger 'A'
+    ## Execute trigger 'A'
     trigger.addAction(99, @[target.name])
 
 proc activate*(trigger: Trigger, target: Timer): Action {.discardable.} =
-    # Activate timer 'A'
+    ## Activate timer 'A'
     trigger.addAction(25, @[target.name])
 proc deactivate*(trigger: Trigger, target: Timer): Action {.discardable.} =
-    # Deactivate timer 'A'
+    ## Deactivate timer 'A'
     trigger.addAction(26, @[target.name])
 
 proc sendRequest*(trigger: Trigger, url: PBVar, resp: PBVar): Action {.discardable.} =
-    # Request webpage in variable 'A' and save response to variable 'B'
+    ## Request webpage in variable 'A' and save response to variable 'B'
     trigger.addAction(169, @[$url, $resp])
 
 proc continueEquals*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
-    # Continue execution only if variable 'A' equals to value 'B'
+    ## Continue execution only if variable 'A' equals to value 'B'
     trigger.addAction(116, @[$var1, value])
 proc continueEquals*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
-    # Continue execution only if variable 'A' equals to variable 'B'
+    ## Continue execution only if variable 'A' equals to variable 'B'
     trigger.addAction(112, @[$var1, $var2])
 
 proc continueNotEquals*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
-    # Continue execution only if variable 'A' is not equal to value 'B'
+    ## Continue execution only if variable 'A' is not equal to value 'B'
     trigger.addAction(117, @[$var1, value])
 proc continueNotEquals*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
-    # Continue execution only if variable 'A' is not equal to variable 'B'
+    ## Continue execution only if variable 'A' is not equal to variable 'B'
     trigger.addAction(113, @[$var1, $var2])
 
 proc replaceVars*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
-    # Replace variables in string-value of variable 'B' with their value and save into variable 'A'
+    ## Replace variables in string-value of variable 'B' with their value and save into variable 'A'
     trigger.addAction(325, @[$var1, $var2])
 proc replaceVars*(trigger: Trigger, var1: PBVar, value: varargs[string, `$`]): Action {.discardable.} =
-    # Replace variables in string-value 'B' with their value and save into variable 'A'
+    ## Replace variables in string-value 'B' with their value and save into variable 'A'
     var B = ""
     for i in value:
         B.add i
     trigger.addAction(326, @[$var1, B])
 
 proc contains*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
-    # Set variable 'A' to 1 if variable 'A' contains string-value 'B', set to 0 in else case
+    ## Set variable 'A' to 1 if variable 'A' contains string-value 'B', set to 0 in else case
     trigger.addAction(149, @[$var1, value])
 proc contains*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
-    # Set variable 'A' to 1 if variable 'A' contains string-value of variable 'B', set to 0 in else case
+    ## Set variable 'A' to 1 if variable 'A' contains string-value of variable 'B', set to 0 in else case
     trigger.addAction(150, @[$var1, $var2])
 
 proc doNothing*(trigger: Trigger): Action {.discardable.} =
     trigger.addAction(DO_NOTHING)
 
 proc switchLevel*(trigger: Trigger, map_id: string): Action {.discardable.} =
-    # Complete mission and switch to level id 'A'
+    ## Complete mission and switch to level id 'A'
     trigger.addAction(50, @[map_id])
 
 proc getCurrent*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
-    # Set value of variable 'A' to current player slot
+    ## Set value of variable 'A' to current player slot
     trigger.addAction(137, @[$var1])
 proc getInitiator*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
-    # Set value of variable 'A' to slot of player-initiator
+    ## Set value of variable 'A' to slot of player-initiator
     trigger.addAction(180, @[$var1])
 proc getKiller*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
-    # Set value of variable 'A' to slot of player-killer
+    ## Set value of variable 'A' to slot of player-killer
     trigger.addAction(181, @[$var1])
 proc getTalker*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
-    # Set value of variable 'A' to slot of player-talker
+    ## Set value of variable 'A' to slot of player-talker
     trigger.addAction(159, @[$var1])
 
 proc getLogin*(trigger: Trigger, var1: PBVar, slot: int): Action {.discardable.} =
-    # Set value of variable 'A' to login of player slot 'B'
+    ## Set value of variable 'A' to login of player slot 'B'
     trigger.addAction(184, @[$var1, $slot])
 proc getLogin*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
-    # Set value of variable 'A' to login of player slot of variable 'B'
+    ## Set value of variable 'A' to login of player slot of variable 'B'
     trigger.addAction(187, @[$var1, $var2])
 
 proc getDisplay*(trigger: Trigger, var1: PBVar, slot: int): Action {.discardable.} =
-    # Set value of variable 'A' to login of player slot 'B'
+    ## Set value of variable 'A' to login of player slot 'B'
     trigger.addAction(185, @[$var1, $slot])
 proc getDisplay*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
-    # Set value of variable 'A' to login of player slot of variable 'B'
+    ## Set value of variable 'A' to login of player slot of variable 'B'
     trigger.addAction(188, @[$var1, $var2])
 
 proc skipIfNotEquals*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
-    # Skip next trigger action if variable 'A' doesnt equal to value 'B'
+    ## Skip next trigger action if variable 'A' doesnt equal to value 'B'
     trigger.addAction(123, @[$var1, $value])
 
 proc registerChatListener*(trigger: Trigger, listener: Trigger): Action {.discardable.} =
-    # Set trigger 'A' as player chat message receiver
+    ## Set trigger 'A' as player chat message receiver
     trigger.addAction(156, @[listener.name])
 
 proc getMessage*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
-    # Set string-value of variable 'A' to text being said
+    ## Set string-value of variable 'A' to text being said
     trigger.addAction(160, @[$var1])
 
 proc variableCheck(var1: PBVar) =
@@ -826,23 +862,23 @@ proc variableCheck(var1: PBVar) =
             echo "[PB2I]: Variable ", $var1, " contains reserved character: ", i, ". You cannot synchronize this variable."
 
 proc sync*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
-    # Synchronize value of variable 'A' overriding value
+    ## Synchronize value of variable 'A' overriding value
     variableCheck(var1)
     trigger.addAction(223, @[$var1])
 proc syncDefined*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
-    # Synchronize value of variable 'A' by defined value
+    ## Synchronize value of variable 'A' by defined value
     variableCheck(var1)
     trigger.addAction(224, @[$var1])
 proc syncMax*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
-    # Synchronize value of variable 'A' by maximum value
+    ## Synchronize value of variable 'A' by maximum value
     variableCheck(var1)
     trigger.addAction(225, @[$var1])
 proc syncMin*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
-    # Synchronize value of variable 'A' by minimum value
+    ## Synchronize value of variable 'A' by minimum value
     variableCheck(var1)
     trigger.addAction(226, @[$var1])
 proc syncLongest*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
-    # Synchronize value of variable 'A' by longest string value
+    ## Synchronize value of variable 'A' by longest string value
     variableCheck(var1)
     trigger.addAction(227, @[$var1])
 
