@@ -294,9 +294,9 @@
 
 </ul>
 <ul class="simple nested-toc-section">newBackground
-  <li><a class="reference" href="#newBackground%2CMap%2Cint%2Cint%2Cint%2Cint%2Cint%2Cstring%2CMovable" title="newBackground(map: Map; x, y, texX, texY, layer = 0; hexMultiplier = &quot;&quot;;
-              showShadow = true; attachTo: Movable = nil): Background">newBackground(map: Map; x, y, texX, texY, layer = 0; hexMultiplier = &quot;&quot;;
-              showShadow = true; attachTo: Movable = nil): Background</a></li>
+  <li><a class="reference" href="#newBackground%2CMap%2Cint%2Cint%2Cint%2Cint%2Cint%2Cint%2Cint%2Cstring%2Cstring%2CMovable" title="newBackground(map: Map; x, y, w, h, texX, texY, layer = 0; material = &quot;0&quot;;
+              hexMultiplier = &quot;&quot;; showShadow = true; attachTo: Movable = nil): Background">newBackground(map: Map; x, y, w, h, texX, texY, layer = 0; material = &quot;0&quot;;
+              hexMultiplier = &quot;&quot;; showShadow = true; attachTo: Movable = nil): Background</a></li>
 
 </ul>
 <ul class="simple nested-toc-section">newBarrel
@@ -1269,10 +1269,11 @@
 
 </div>
 <div id="newBackground-procs-all">
-  <div id="newBackground,Map,int,int,int,int,int,string,Movable">
-  <dt><pre><span class="Keyword">proc</span> <a href="#newBackground%2CMap%2Cint%2Cint%2Cint%2Cint%2Cint%2Cstring%2CMovable"><span class="Identifier">newBackground</span></a><span class="Other">(</span><span class="Identifier">map</span><span class="Other">:</span> <a href="pb2i.html#Map"><span class="Identifier">Map</span></a><span class="Other">;</span> <span class="Identifier">x</span><span class="Other">,</span> <span class="Identifier">y</span><span class="Other">,</span> <span class="Identifier">texX</span><span class="Other">,</span> <span class="Identifier">texY</span><span class="Other">,</span> <span class="Identifier">layer</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">;</span> <span class="Identifier">hexMultiplier</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">;</span>
-                   <span class="Identifier">showShadow</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">;</span> <span class="Identifier">attachTo</span><span class="Other">:</span> <a href="pb2i.html#Movable"><span class="Identifier">Movable</span></a> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Background"><span class="Identifier">Background</span></a> {.
-    <span class="Identifier">discardable</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <div id="newBackground,Map,int,int,int,int,int,int,int,string,string,Movable">
+  <dt><pre><span class="Keyword">proc</span> <a href="#newBackground%2CMap%2Cint%2Cint%2Cint%2Cint%2Cint%2Cint%2Cint%2Cstring%2Cstring%2CMovable"><span class="Identifier">newBackground</span></a><span class="Other">(</span><span class="Identifier">map</span><span class="Other">:</span> <a href="pb2i.html#Map"><span class="Identifier">Map</span></a><span class="Other">;</span> <span class="Identifier">x</span><span class="Other">,</span> <span class="Identifier">y</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">,</span> <span class="Identifier">h</span><span class="Other">,</span> <span class="Identifier">texX</span><span class="Other">,</span> <span class="Identifier">texY</span><span class="Other">,</span> <span class="Identifier">layer</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">;</span> <span class="Identifier">material</span> <span class="Other">=</span> <span class="StringLit">&quot;0&quot;</span><span class="Other">;</span>
+                   <span class="Identifier">hexMultiplier</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">;</span> <span class="Identifier">showShadow</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">;</span>
+                   <span class="Identifier">attachTo</span><span class="Other">:</span> <a href="pb2i.html#Movable"><span class="Identifier">Movable</span></a> <span class="Other">=</span> <span class="Keyword">nil</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Background"><span class="Identifier">Background</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Creates new background.
@@ -1723,7 +1724,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-08-07 17:02:41 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-08-11 12:49:47 UTC</small>
       </div>
     </div>
   </div>
