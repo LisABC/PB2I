@@ -679,14 +679,15 @@ proc newPusher*(map: Map, name: string, x, y, tox, toy, stabilityDamage, damage 
     )
     map.pushers.add(result)
 
-proc newBackground*(map: Map, x, y, texX, texY, layer = 0, hexMultiplier = "", showShadow = true, attachTo: Movable = nil): Background {.discardable.} =
+proc newBackground*(map: Map, x, y, w, h, texX, texY, layer = 0, material = "0", hexMultiplier = "", showShadow = true, attachTo: Movable = nil): Background {.discardable.} =
     ## Creates new background.
     result = Background(
-        x:x, y: y, texX: texX, texY: texY,
+        x:x, y: y, w:w, h:h, texX: texX, texY: texY,
         layer: layer,
         hexMultiplier: hexMultiplier,
         showShadow: showShadow,
-        attachTo: attachTo
+        attachTo: attachTo,
+        material: material
     )
     map.backgrounds.add(result)
 
