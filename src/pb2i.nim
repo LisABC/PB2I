@@ -787,12 +787,26 @@ proc continueEquals*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.
     ## Continue execution only if variable 'A' equals to variable 'B'
     trigger.addAction(112, @[$var1, $var2])
 
-proc continueNotEquals*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
-    ## Continue execution only if variable 'A' is not equal to value 'B'
-    trigger.addAction(117, @[$var1, value])
 proc continueNotEquals*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
     ## Continue execution only if variable 'A' is not equal to variable 'B'
     trigger.addAction(113, @[$var1, $var2])
+proc continueNotEquals*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
+    ## Continue execution only if variable 'A' is not equal to value 'B'
+    trigger.addAction(117, @[$var1, value])
+
+proc continueGT*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    ## Continue execution only if variable 'A' is greater than variable 'B'
+    trigger.addAction(110, @[$var1, $var2])
+proc continueGT*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
+    ## Continue execution only if variable 'A' is greater than value 'B'
+    trigger.addAction(114, @[$var1, value])
+
+proc continueLT*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    ## Continue execution only if variable 'A' is less than variable 'B'
+    trigger.addAction(111, @[$var1, $var2])
+proc continueLT*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
+    ## Continue execution only if variable 'A' is less than value 'B'
+    trigger.addAction(115, @[$var1, value])
 
 proc replaceVars*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
     ## Replace variables in string-value of variable 'B' with their value and save into variable 'A'

@@ -221,6 +221,16 @@
 <li><a class="reference" href="#continueEquals%2CTrigger%2CPBVar%2Cstring" title="continueEquals(trigger: Trigger; var1: PBVar; value: string): Action">continueEquals(trigger: Trigger; var1: PBVar; value: string): Action</a></li>
 
 </ul>
+<ul class="simple nested-toc-section">continueGT
+  <li><a class="reference" href="#continueGT%2CTrigger%2CPBVar%2CPBVar" title="continueGT(trigger: Trigger; var1, var2: PBVar): Action">continueGT(trigger: Trigger; var1, var2: PBVar): Action</a></li>
+<li><a class="reference" href="#continueGT%2CTrigger%2CPBVar%2Cstring" title="continueGT(trigger: Trigger; var1: PBVar; value: string): Action">continueGT(trigger: Trigger; var1: PBVar; value: string): Action</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">continueLT
+  <li><a class="reference" href="#continueLT%2CTrigger%2CPBVar%2CPBVar" title="continueLT(trigger: Trigger; var1, var2: PBVar): Action">continueLT(trigger: Trigger; var1, var2: PBVar): Action</a></li>
+<li><a class="reference" href="#continueLT%2CTrigger%2CPBVar%2Cstring" title="continueLT(trigger: Trigger; var1: PBVar; value: string): Action">continueLT(trigger: Trigger; var1: PBVar; value: string): Action</a></li>
+
+</ul>
 <ul class="simple nested-toc-section">continueNotEquals
   <li><a class="reference" href="#continueNotEquals%2CTrigger%2CPBVar%2CPBVar" title="continueNotEquals(trigger: Trigger; var1, var2: PBVar): Action">continueNotEquals(trigger: Trigger; var1, var2: PBVar): Action</a></li>
 <li><a class="reference" href="#continueNotEquals%2CTrigger%2CPBVar%2Cstring" title="continueNotEquals(trigger: Trigger; var1: PBVar; value: string): Action">continueNotEquals(trigger: Trigger; var1: PBVar; value: string): Action</a></li>
@@ -942,6 +952,48 @@
   <dd>
     
     Continue execution only if variable 'A' equals to value 'B'
+    
+  </dd>
+</div>
+
+</div>
+<div id="continueGT-procs-all">
+  <div id="continueGT,Trigger,PBVar,PBVar">
+  <dt><pre><span class="Keyword">proc</span> <a href="#continueGT%2CTrigger%2CPBVar%2CPBVar"><span class="Identifier">continueGT</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">,</span> <span class="Identifier">var2</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Continue execution only if variable 'A' is greater than variable 'B'
+    
+  </dd>
+</div>
+<div id="continueGT,Trigger,PBVar,string">
+  <dt><pre><span class="Keyword">proc</span> <a href="#continueGT%2CTrigger%2CPBVar%2Cstring"><span class="Identifier">continueGT</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.
+    <span class="Identifier">discardable</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Continue execution only if variable 'A' is greater than value 'B'
+    
+  </dd>
+</div>
+
+</div>
+<div id="continueLT-procs-all">
+  <div id="continueLT,Trigger,PBVar,PBVar">
+  <dt><pre><span class="Keyword">proc</span> <a href="#continueLT%2CTrigger%2CPBVar%2CPBVar"><span class="Identifier">continueLT</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">,</span> <span class="Identifier">var2</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Continue execution only if variable 'A' is less than variable 'B'
+    
+  </dd>
+</div>
+<div id="continueLT,Trigger,PBVar,string">
+  <dt><pre><span class="Keyword">proc</span> <a href="#continueLT%2CTrigger%2CPBVar%2Cstring"><span class="Identifier">continueLT</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.
+    <span class="Identifier">discardable</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Continue execution only if variable 'A' is less than value 'B'
     
   </dd>
 </div>
@@ -1724,7 +1776,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-08-11 12:49:47 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-08-28 12:56:09 UTC</small>
       </div>
     </div>
   </div>
