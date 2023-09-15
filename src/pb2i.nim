@@ -463,7 +463,7 @@ proc dump*(trigger: Trigger): string =
     for group in actionGroups:
         if group.len == 0:
             continue
-        if group[^1].opID == 123:
+        if group[^1].opID in [123, 361, 364, 365]:
             raise LibraryError.newException("An 'Skip next trigger' action is in end of trigger `" & trigger.name & "`, please fix this yourself")
     if actionGroups[^1].len == 0:
         discard actionGroups.pop
@@ -720,12 +720,12 @@ proc move*(trigger: Trigger, reg1, reg2: Region): Action {.discardable.} =
     ## Move region 'A' to region 'B'
     trigger.addAction(2, @[reg1.name, reg2.name])
 proc move*(trigger: Trigger, water: Water, reg: Region): Action {.discardable.} =
-    # Move water 'A' to region 'B'
+    ## Move water 'A' to region 'B'
     trigger.addAction(392, @[water.name, reg.name])
 
 
 proc changeDamage*(trigger: Trigger, water: Water, val: varargs[string, `$`]): Action {.discardable.} =
-    # Change water 'A' damage to string-value/variable 'B'
+    ## Change water 'A' damage to string-value/variable 'B'
     var B = ""
     for i in val:
         B.add i
@@ -874,6 +874,16 @@ proc getDisplay*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
 proc skipIfNotEquals*(trigger: Trigger, var1: PBVar, value: string): Action {.discardable.} =
     ## Skip next trigger action if variable 'A' doesnt equal to value 'B'
     trigger.addAction(123, @[$var1, $value])
+proc skipIfEquals*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    ## Skip next trigger action if variable 'A' equals variable 'B'
+    trigger.addAction(361, @[$var1, $var2])
+proc skipIfGT*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    ## Skip next trigger action if variable 'A' is greater than variable 'B'
+    trigger.addAction(364, @[$var1, $var2])
+proc skipIfLT*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    ## Skip next trigger action if variable 'A' is less than variable 'B'
+    trigger.addAction(365, @[$var1, $var2])
+
 
 proc registerChatListener*(trigger: Trigger, listener: Trigger): Action {.discardable.} =
     ## Set trigger 'A' as player chat message receiver
