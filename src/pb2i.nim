@@ -426,7 +426,7 @@ proc chunk(actions: seq[Action]): seq[seq[Action]] =
         result.add(actions[i*9..<i*9+9])
     result.add(actions[^(actions.len mod 9)..<actions.len])
 
-proc execute*(trigger: Trigger, target: Trigger): Action {.discardable.}
+proc switchExecution*(trigger: Trigger, target: Trigger): Action {.discardable.}
 proc newTrigger*(name: string, x, y = 0, enabled = true, maxCalls = 1, actions: seq[Action] = @[], implicitSplitting = true): Trigger
 
 proc dump*(trigger: Trigger): string =
@@ -455,8 +455,6 @@ proc dump*(trigger: Trigger): string =
 
     if not trigger.implicitSplitting:
         raise LibraryError.newException(">10 actions in trigger that has `implicitSplitting` disabled is not allowed, but trigger " & trigger.name & " has " & $trigger.actions.len & " actions.")
-    if trigger.actions.len > (9 * 2048):
-        raise LibraryError.newException("9 * 2048 action is max for trigger in PB2I, sorry, trigger: " & trigger.name & ".")
 
     var triggers: seq[Trigger]
     var actionGroups = trigger.actions.chunk()
@@ -484,7 +482,7 @@ proc dump*(trigger: Trigger): string =
             maxCalls = -1,
             actions = actionGroups[index]
         )
-        triggers[^1].execute(st)
+        triggers[^1].switchExecution(st)
         triggers.add(st)
     for trigger in triggers:
         result.add trigger.dump
@@ -780,6 +778,13 @@ proc sendChatMessage*(trigger: Trigger, who = EXOS, texts: varargs[string, `$`])
 proc execute*(trigger: Trigger, target: Trigger): Action {.discardable.} =
     ## Execute trigger 'A'
     trigger.addAction(99, @[target.name])
+
+proc switchExecution*(trigger: Trigger, target: PBvar): Action {.discardable.} =
+    ## Switch execution to trigger ID variable 'A'
+    trigger.addAction(362, @[$target])
+proc switchExecution*(trigger: Trigger, target: Trigger): Action {.discardable.} =
+    ## Switch execution to trigger 'A'
+    trigger.addAction(363, @[target.name])
 
 proc activate*(trigger: Trigger, target: Timer): Action {.discardable.} =
     ## Activate timer 'A'
