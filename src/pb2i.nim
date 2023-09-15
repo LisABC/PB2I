@@ -925,4 +925,34 @@ proc syncLongest*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
     trigger.addAction(227, @[$var1])
 
 
+proc createArray*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
+    ## Create array at variable 'A'
+    trigger.addAction(354, @[$var1])
+
+proc split*(trigger: Trigger, var1: PBVar, by: string): Action {.discardable.} =
+    ## Split variable 'A' by value 'B'
+    trigger.addAction(349, @[$var1, by])
+proc split*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    ## Split variable 'A' by variable 'B'
+    trigger.addAction(399, @[$var1, $var2])
+
+proc join*(trigger: Trigger, var1: PBVar, by: string): Action {.discardable.} =
+    ## Join array 'A' by 'B'
+    trigger.addAction(405, @[$var1, $by])
+
+proc index*(trigger: Trigger, var1: PBVar, index: int): Action {.discardable.} =
+    ## Index variable 'A' with 'B' and save into variable 'A'
+    trigger.addAction(350, @[$var1, $index])
+
+proc append*(trigger: Trigger, var1: PBVar, element: varargs[string, `$`]): Action {.discardable.} =
+    ## Add element 'B' to array 'A'
+    var B = ""
+    for i in element:
+        B.add i
+    trigger.addAction(352, @[$var1, B])
+
+proc length*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
+    ## Get length 'B' and save into 'A'
+    trigger.addAction(151, @[$var1, $var2])
+
 {.pop.}
