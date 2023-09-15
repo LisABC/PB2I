@@ -158,7 +158,7 @@
 <li><a class="reference" href="#Vehicle" title="Vehicle = ref object of BaseNamedMapObject
   side*, tox*, toy*, hpPercent*: int
   model*: string">Vehicle</a></li>
-<li><a class="reference" href="#Water" title="Water = ref object of BaseMapObject
+<li><a class="reference" href="#Water" title="Water = ref object of BaseNamedMapObject
   w*, h*, damage*: int
   friction*: bool">Water</a></li>
 <li><a class="reference" href="#Weapon" title="Weapon = ref object of BaseNamedMapObject
@@ -203,8 +203,20 @@
 <li><a class="reference" href="#addAction%2CTrigger%2Cint%2Cseq%5Bstring%5D" title="addAction(trigger: Trigger; opID: int; args: seq[string]): Action">addAction(trigger: Trigger; opID: int; args: seq[string]): Action</a></li>
 
 </ul>
+<ul class="simple nested-toc-section">append
+  <li><a class="reference" href="#append%2CTrigger%2CPBVar%2Cvarargs%5Bstring%2C%5D" title="append(trigger: Trigger; var1: PBVar; element: varargs[string, `$`]): Action">append(trigger: Trigger; var1: PBVar; element: varargs[string, `$`]): Action</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">changeDamage
+  <li><a class="reference" href="#changeDamage%2CTrigger%2CWater%2Cvarargs%5Bstring%2C%5D" title="changeDamage(trigger: Trigger; water: Water; val: varargs[string, `$`]): Action">changeDamage(trigger: Trigger; water: Water; val: varargs[string, `$`]): Action</a></li>
+
+</ul>
 <ul class="simple nested-toc-section">changeSpeed
   <li><a class="reference" href="#changeSpeed%2CTrigger%2CMovable%2Cint" title="changeSpeed(trigger: Trigger; mov: Movable; value: int): Action">changeSpeed(trigger: Trigger; mov: Movable; value: int): Action</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">colorGunWithMatrix
+  <li><a class="reference" href="#colorGunWithMatrix%2CTrigger%2CWeapon%2CPBVar" title="colorGunWithMatrix(trigger: Trigger; gun: Weapon; var1: PBVar): Action">colorGunWithMatrix(trigger: Trigger; gun: Weapon; var1: PBVar): Action</a></li>
 
 </ul>
 <ul class="simple nested-toc-section">concatenate
@@ -234,6 +246,14 @@
 <ul class="simple nested-toc-section">continueNotEquals
   <li><a class="reference" href="#continueNotEquals%2CTrigger%2CPBVar%2CPBVar" title="continueNotEquals(trigger: Trigger; var1, var2: PBVar): Action">continueNotEquals(trigger: Trigger; var1, var2: PBVar): Action</a></li>
 <li><a class="reference" href="#continueNotEquals%2CTrigger%2CPBVar%2Cstring" title="continueNotEquals(trigger: Trigger; var1: PBVar; value: string): Action">continueNotEquals(trigger: Trigger; var1: PBVar; value: string): Action</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">createArray
+  <li><a class="reference" href="#createArray%2CTrigger%2CPBVar" title="createArray(trigger: Trigger; var1: PBVar): Action">createArray(trigger: Trigger; var1: PBVar): Action</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">createColourMatrix
+  <li><a class="reference" href="#createColourMatrix%2CTrigger%2CPBVar%2Carray%5B%2Cfloat%5D" title="createColourMatrix(trigger: Trigger; var1: PBVar; mat: array[4 * 5, float]): Action">createColourMatrix(trigger: Trigger; var1: PBVar; mat: array[4 * 5, float]): Action</a></li>
 
 </ul>
 <ul class="simple nested-toc-section">deactivate
@@ -298,9 +318,22 @@
   <li><a class="reference" href="#getTalker%2CTrigger%2CPBVar" title="getTalker(trigger: Trigger; var1: PBVar): Action">getTalker(trigger: Trigger; var1: PBVar): Action</a></li>
 
 </ul>
+<ul class="simple nested-toc-section">index
+  <li><a class="reference" href="#index%2CTrigger%2CPBVar%2Cint" title="index(trigger: Trigger; var1: PBVar; index: int): Action">index(trigger: Trigger; var1: PBVar; index: int): Action</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">join
+  <li><a class="reference" href="#join%2CTrigger%2CPBVar%2Cstring" title="join(trigger: Trigger; var1: PBVar; by: string): Action">join(trigger: Trigger; var1: PBVar; by: string): Action</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">length
+  <li><a class="reference" href="#length%2CTrigger%2CPBVar%2CPBVar" title="length(trigger: Trigger; var1, var2: PBVar): Action">length(trigger: Trigger; var1, var2: PBVar): Action</a></li>
+
+</ul>
 <ul class="simple nested-toc-section">move
   <li><a class="reference" href="#move%2CTrigger%2CMovable%2CRegion" title="move(trigger: Trigger; mov: Movable; reg: Region): Action">move(trigger: Trigger; mov: Movable; reg: Region): Action</a></li>
 <li><a class="reference" href="#move%2CTrigger%2CRegion%2CRegion" title="move(trigger: Trigger; reg1, reg2: Region): Action">move(trigger: Trigger; reg1, reg2: Region): Action</a></li>
+<li><a class="reference" href="#move%2CTrigger%2CWater%2CRegion" title="move(trigger: Trigger; water: Water; reg: Region): Action">move(trigger: Trigger; water: Water; reg: Region): Action</a></li>
 
 </ul>
 <ul class="simple nested-toc-section">newBackground
@@ -391,7 +424,7 @@
 
 </ul>
 <ul class="simple nested-toc-section">newWater
-  <li><a class="reference" href="#newWater%2CMap%2Cint%2Cint%2Cint%2Cint%2Cint" title="newWater(map: Map; x, y, w, h, damage = 0; friction = true): Water">newWater(map: Map; x, y, w, h, damage = 0; friction = true): Water</a></li>
+  <li><a class="reference" href="#newWater%2CMap%2Cstring%2Cint%2Cint%2Cint%2Cint%2Cint" title="newWater(map: Map; name: string; x, y, w, h, damage = 0; friction = true): Water">newWater(map: Map; name: string; x, y, w, h, damage = 0; friction = true): Water</a></li>
 
 </ul>
 <ul class="simple nested-toc-section">newWeapon
@@ -436,8 +469,30 @@
   <li><a class="reference" href="#setVariableIfUndefined%2CTrigger%2CPBVar%2Cstring" title="setVariableIfUndefined(trigger: Trigger; pbvar1: PBVar; value: string): Action">setVariableIfUndefined(trigger: Trigger; pbvar1: PBVar; value: string): Action</a></li>
 
 </ul>
+<ul class="simple nested-toc-section">skipIfEquals
+  <li><a class="reference" href="#skipIfEquals%2CTrigger%2CPBVar%2CPBVar" title="skipIfEquals(trigger: Trigger; var1, var2: PBVar): Action">skipIfEquals(trigger: Trigger; var1, var2: PBVar): Action</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">skipIfGT
+  <li><a class="reference" href="#skipIfGT%2CTrigger%2CPBVar%2CPBVar" title="skipIfGT(trigger: Trigger; var1, var2: PBVar): Action">skipIfGT(trigger: Trigger; var1, var2: PBVar): Action</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">skipIfLT
+  <li><a class="reference" href="#skipIfLT%2CTrigger%2CPBVar%2CPBVar" title="skipIfLT(trigger: Trigger; var1, var2: PBVar): Action">skipIfLT(trigger: Trigger; var1, var2: PBVar): Action</a></li>
+
+</ul>
 <ul class="simple nested-toc-section">skipIfNotEquals
   <li><a class="reference" href="#skipIfNotEquals%2CTrigger%2CPBVar%2Cstring" title="skipIfNotEquals(trigger: Trigger; var1: PBVar; value: string): Action">skipIfNotEquals(trigger: Trigger; var1: PBVar; value: string): Action</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">split
+  <li><a class="reference" href="#split%2CTrigger%2CPBVar%2CPBVar" title="split(trigger: Trigger; var1, var2: PBVar): Action">split(trigger: Trigger; var1, var2: PBVar): Action</a></li>
+<li><a class="reference" href="#split%2CTrigger%2CPBVar%2Cstring" title="split(trigger: Trigger; var1: PBVar; by: string): Action">split(trigger: Trigger; var1: PBVar; by: string): Action</a></li>
+
+</ul>
+<ul class="simple nested-toc-section">switchExecution
+  <li><a class="reference" href="#switchExecution%2CTrigger%2CPBVar" title="switchExecution(trigger: Trigger; target: PBVar): Action">switchExecution(trigger: Trigger; target: PBVar): Action</a></li>
+<li><a class="reference" href="#switchExecution%2CTrigger%2CTrigger" title="switchExecution(trigger: Trigger; target: Trigger): Action">switchExecution(trigger: Trigger; target: Trigger): Action</a></li>
 
 </ul>
 <ul class="simple nested-toc-section">switchLevel
@@ -753,7 +808,7 @@
   </dd>
 </div>
 <div id="Water">
-  <dt><pre><a href="pb2i.html#Water"><span class="Identifier">Water</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="pb2i.html#BaseMapObject"><span class="Identifier">BaseMapObject</span></a>
+  <dt><pre><a href="pb2i.html#Water"><span class="Identifier">Water</span></a> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <a href="pb2i.html#BaseNamedMapObject"><span class="Identifier">BaseNamedMapObject</span></a>
   <span class="Identifier">w</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">h</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">damage</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int</span>
   <span class="Identifier">friction</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
 </pre></dt>
@@ -891,6 +946,30 @@
 </div>
 
 </div>
+<div id="append-procs-all">
+  <div id="append,Trigger,PBVar,varargs[string,]">
+  <dt><pre><span class="Keyword">proc</span> <a href="#append%2CTrigger%2CPBVar%2Cvarargs%5Bstring%2C%5D"><span class="Identifier">append</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">;</span> <span class="Identifier">element</span><span class="Other">:</span> <span class="Identifier">varargs</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">,</span> <span class="Other">`</span><span class="Operator">$</span><span class="Other">`</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.
+    <span class="Identifier">discardable</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Add element 'B' to array 'A'
+    
+  </dd>
+</div>
+
+</div>
+<div id="changeDamage-procs-all">
+  <div id="changeDamage,Trigger,Water,varargs[string,]">
+  <dt><pre><span class="Keyword">proc</span> <a href="#changeDamage%2CTrigger%2CWater%2Cvarargs%5Bstring%2C%5D"><span class="Identifier">changeDamage</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">water</span><span class="Other">:</span> <a href="pb2i.html#Water"><span class="Identifier">Water</span></a><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">varargs</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">,</span> <span class="Other">`</span><span class="Operator">$</span><span class="Other">`</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.
+    <span class="Identifier">discardable</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Change water 'A' damage to string-value/variable 'B'
+    
+  </dd>
+</div>
+
+</div>
 <div id="changeSpeed-procs-all">
   <div id="changeSpeed,Trigger,Movable,int">
   <dt><pre><span class="Keyword">proc</span> <a href="#changeSpeed%2CTrigger%2CMovable%2Cint"><span class="Identifier">changeSpeed</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">mov</span><span class="Other">:</span> <a href="pb2i.html#Movable"><span class="Identifier">Movable</span></a><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.
@@ -898,6 +977,18 @@
   <dd>
     
     Change movable 'A' speed to value 'B'
+    
+  </dd>
+</div>
+
+</div>
+<div id="colorGunWithMatrix-procs-all">
+  <div id="colorGunWithMatrix,Trigger,Weapon,PBVar">
+  <dt><pre><span class="Keyword">proc</span> <a href="#colorGunWithMatrix%2CTrigger%2CWeapon%2CPBVar"><span class="Identifier">colorGunWithMatrix</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">gun</span><span class="Other">:</span> <a href="pb2i.html#Weapon"><span class="Identifier">Weapon</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.
+    <span class="Identifier">discardable</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Colors weapon 'A' with matrix stored in variable 'B'
     
   </dd>
 </div>
@@ -1015,6 +1106,30 @@
   <dd>
     
     Continue execution only if variable 'A' is not equal to value 'B'
+    
+  </dd>
+</div>
+
+</div>
+<div id="createArray-procs-all">
+  <div id="createArray,Trigger,PBVar">
+  <dt><pre><span class="Keyword">proc</span> <a href="#createArray%2CTrigger%2CPBVar"><span class="Identifier">createArray</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Create array at variable 'A'
+    
+  </dd>
+</div>
+
+</div>
+<div id="createColourMatrix-procs-all">
+  <div id="createColourMatrix,Trigger,PBVar,array[,float]">
+  <dt><pre><span class="Keyword">proc</span> <a href="#createColourMatrix%2CTrigger%2CPBVar%2Carray%5B%2Cfloat%5D"><span class="Identifier">createColourMatrix</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">;</span> <span class="Identifier">mat</span><span class="Other">:</span> <span class="Identifier">array</span><span class="Other">[</span><span class="DecNumber">4</span> <span class="Operator">*</span> <span class="DecNumber">5</span><span class="Other">,</span> <span class="Identifier">float</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.
+    <span class="Identifier">discardable</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Convenience procedure that inserts matrix. (takes 2 actions)
     
   </dd>
 </div>
@@ -1191,7 +1306,7 @@
     <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
-    
+    Execute trigger 'A'
     
   </dd>
 </div>
@@ -1299,6 +1414,42 @@
 </div>
 
 </div>
+<div id="index-procs-all">
+  <div id="index,Trigger,PBVar,int">
+  <dt><pre><span class="Keyword">proc</span> <a href="#index%2CTrigger%2CPBVar%2Cint"><span class="Identifier">index</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">;</span> <span class="Identifier">index</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Index variable 'A' with 'B' and save into variable 'A'
+    
+  </dd>
+</div>
+
+</div>
+<div id="join-procs-all">
+  <div id="join,Trigger,PBVar,string">
+  <dt><pre><span class="Keyword">proc</span> <a href="#join%2CTrigger%2CPBVar%2Cstring"><span class="Identifier">join</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">;</span> <span class="Identifier">by</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Join array 'A' by 'B'
+    
+  </dd>
+</div>
+
+</div>
+<div id="length-procs-all">
+  <div id="length,Trigger,PBVar,PBVar">
+  <dt><pre><span class="Keyword">proc</span> <a href="#length%2CTrigger%2CPBVar%2CPBVar"><span class="Identifier">length</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">,</span> <span class="Identifier">var2</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Get length 'B' and save into 'A'
+    
+  </dd>
+</div>
+
+</div>
 <div id="move-procs-all">
   <div id="move,Trigger,Movable,Region">
   <dt><pre><span class="Keyword">proc</span> <a href="#move%2CTrigger%2CMovable%2CRegion"><span class="Identifier">move</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">mov</span><span class="Other">:</span> <a href="pb2i.html#Movable"><span class="Identifier">Movable</span></a><span class="Other">;</span> <span class="Identifier">reg</span><span class="Other">:</span> <a href="pb2i.html#Region"><span class="Identifier">Region</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
@@ -1315,6 +1466,15 @@
   <dd>
     
     Move region 'A' to region 'B'
+    
+  </dd>
+</div>
+<div id="move,Trigger,Water,Region">
+  <dt><pre><span class="Keyword">proc</span> <a href="#move%2CTrigger%2CWater%2CRegion"><span class="Identifier">move</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">water</span><span class="Other">:</span> <a href="pb2i.html#Water"><span class="Identifier">Water</span></a><span class="Other">;</span> <span class="Identifier">reg</span><span class="Other">:</span> <a href="pb2i.html#Region"><span class="Identifier">Region</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Move water 'A' to region 'B'
     
   </dd>
 </div>
@@ -1526,8 +1686,8 @@
 
 </div>
 <div id="newWater-procs-all">
-  <div id="newWater,Map,int,int,int,int,int">
-  <dt><pre><span class="Keyword">proc</span> <a href="#newWater%2CMap%2Cint%2Cint%2Cint%2Cint%2Cint"><span class="Identifier">newWater</span></a><span class="Other">(</span><span class="Identifier">map</span><span class="Other">:</span> <a href="pb2i.html#Map"><span class="Identifier">Map</span></a><span class="Other">;</span> <span class="Identifier">x</span><span class="Other">,</span> <span class="Identifier">y</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">,</span> <span class="Identifier">h</span><span class="Other">,</span> <span class="Identifier">damage</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">;</span> <span class="Identifier">friction</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Water"><span class="Identifier">Water</span></a> {.
+  <div id="newWater,Map,string,int,int,int,int,int">
+  <dt><pre><span class="Keyword">proc</span> <a href="#newWater%2CMap%2Cstring%2Cint%2Cint%2Cint%2Cint%2Cint"><span class="Identifier">newWater</span></a><span class="Other">(</span><span class="Identifier">map</span><span class="Other">:</span> <a href="pb2i.html#Map"><span class="Identifier">Map</span></a><span class="Other">;</span> <span class="Identifier">name</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">x</span><span class="Other">,</span> <span class="Identifier">y</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">,</span> <span class="Identifier">h</span><span class="Other">,</span> <span class="Identifier">damage</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">;</span> <span class="Identifier">friction</span> <span class="Other">=</span> <span class="Identifier">true</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Water"><span class="Identifier">Water</span></a> {.
     <span class="Identifier">discardable</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
@@ -1682,6 +1842,42 @@
 </div>
 
 </div>
+<div id="skipIfEquals-procs-all">
+  <div id="skipIfEquals,Trigger,PBVar,PBVar">
+  <dt><pre><span class="Keyword">proc</span> <a href="#skipIfEquals%2CTrigger%2CPBVar%2CPBVar"><span class="Identifier">skipIfEquals</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">,</span> <span class="Identifier">var2</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Skip next trigger action if variable 'A' equals variable 'B'
+    
+  </dd>
+</div>
+
+</div>
+<div id="skipIfGT-procs-all">
+  <div id="skipIfGT,Trigger,PBVar,PBVar">
+  <dt><pre><span class="Keyword">proc</span> <a href="#skipIfGT%2CTrigger%2CPBVar%2CPBVar"><span class="Identifier">skipIfGT</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">,</span> <span class="Identifier">var2</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Skip next trigger action if variable 'A' is greater than variable 'B'
+    
+  </dd>
+</div>
+
+</div>
+<div id="skipIfLT-procs-all">
+  <div id="skipIfLT,Trigger,PBVar,PBVar">
+  <dt><pre><span class="Keyword">proc</span> <a href="#skipIfLT%2CTrigger%2CPBVar%2CPBVar"><span class="Identifier">skipIfLT</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">,</span> <span class="Identifier">var2</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Skip next trigger action if variable 'A' is less than variable 'B'
+    
+  </dd>
+</div>
+
+</div>
 <div id="skipIfNotEquals-procs-all">
   <div id="skipIfNotEquals,Trigger,PBVar,string">
   <dt><pre><span class="Keyword">proc</span> <a href="#skipIfNotEquals%2CTrigger%2CPBVar%2Cstring"><span class="Identifier">skipIfNotEquals</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">;</span> <span class="Identifier">value</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.
@@ -1689,6 +1885,48 @@
   <dd>
     
     Skip next trigger action if variable 'A' doesnt equal to value 'B'
+    
+  </dd>
+</div>
+
+</div>
+<div id="split-procs-all">
+  <div id="split,Trigger,PBVar,PBVar">
+  <dt><pre><span class="Keyword">proc</span> <a href="#split%2CTrigger%2CPBVar%2CPBVar"><span class="Identifier">split</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">,</span> <span class="Identifier">var2</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Split variable 'A' by variable 'B'
+    
+  </dd>
+</div>
+<div id="split,Trigger,PBVar,string">
+  <dt><pre><span class="Keyword">proc</span> <a href="#split%2CTrigger%2CPBVar%2Cstring"><span class="Identifier">split</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">;</span> <span class="Identifier">by</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Split variable 'A' by value 'B'
+    
+  </dd>
+</div>
+
+</div>
+<div id="switchExecution-procs-all">
+  <div id="switchExecution,Trigger,PBVar">
+  <dt><pre><span class="Keyword">proc</span> <a href="#switchExecution%2CTrigger%2CPBVar"><span class="Identifier">switchExecution</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">target</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    Switch execution to trigger ID variable 'A'
+    
+  </dd>
+</div>
+<div id="switchExecution,Trigger,Trigger">
+  <dt><pre><span class="Keyword">proc</span> <a href="#switchExecution%2CTrigger%2CTrigger"><span class="Identifier">switchExecution</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">target</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dd>
+    
+    
     
   </dd>
 </div>
@@ -1708,8 +1946,8 @@
 </div>
 <div id="sync-procs-all">
   <div id="sync,Trigger,PBVar">
-  <dt><pre><span class="Keyword">proc</span> <a href="#sync%2CTrigger%2CPBVar"><span class="Identifier">sync</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#sync%2CTrigger%2CPBVar"><span class="Identifier">sync</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">LibraryError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Synchronize value of variable 'A' overriding value
@@ -1721,7 +1959,7 @@
 <div id="syncDefined-procs-all">
   <div id="syncDefined,Trigger,PBVar">
   <dt><pre><span class="Keyword">proc</span> <a href="#syncDefined%2CTrigger%2CPBVar"><span class="Identifier">syncDefined</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">LibraryError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Synchronize value of variable 'A' by defined value
@@ -1733,7 +1971,7 @@
 <div id="syncLongest-procs-all">
   <div id="syncLongest,Trigger,PBVar">
   <dt><pre><span class="Keyword">proc</span> <a href="#syncLongest%2CTrigger%2CPBVar"><span class="Identifier">syncLongest</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
-    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">LibraryError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Synchronize value of variable 'A' by longest string value
@@ -1744,8 +1982,8 @@
 </div>
 <div id="syncMax-procs-all">
   <div id="syncMax,Trigger,PBVar">
-  <dt><pre><span class="Keyword">proc</span> <a href="#syncMax%2CTrigger%2CPBVar"><span class="Identifier">syncMax</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#syncMax%2CTrigger%2CPBVar"><span class="Identifier">syncMax</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">LibraryError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Synchronize value of variable 'A' by maximum value
@@ -1756,8 +1994,8 @@
 </div>
 <div id="syncMin-procs-all">
   <div id="syncMin,Trigger,PBVar">
-  <dt><pre><span class="Keyword">proc</span> <a href="#syncMin%2CTrigger%2CPBVar"><span class="Identifier">syncMin</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span> <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span>
-    <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
+  <dt><pre><span class="Keyword">proc</span> <a href="#syncMin%2CTrigger%2CPBVar"><span class="Identifier">syncMin</span></a><span class="Other">(</span><span class="Identifier">trigger</span><span class="Other">:</span> <a href="pb2i.html#Trigger"><span class="Identifier">Trigger</span></a><span class="Other">;</span> <span class="Identifier">var1</span><span class="Other">:</span> <a href="pb2i.html#PBVar"><span class="Identifier">PBVar</span></a><span class="Other">)</span><span class="Other">:</span> <a href="pb2i.html#Action"><span class="Identifier">Action</span></a> {.<span class="Identifier">discardable</span><span class="Other">,</span>
+    <span><span class="Other pragmadots">...</span></span><span class="pragmawrap"><span class="Identifier">raises</span><span class="Other">:</span> <span class="Other">[</span><span class="Identifier">LibraryError</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">tags</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span><span class="Other">,</span> <span class="Identifier">forbids</span><span class="Other">:</span> <span class="Other">[</span><span class="Other">]</span></span>.}</pre></dt>
   <dd>
     
     Synchronize value of variable 'A' by minimum value
@@ -1776,7 +2014,7 @@
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2023-08-28 12:56:09 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2023-09-15 20:39:58 UTC</small>
       </div>
     </div>
   </div>
