@@ -73,7 +73,7 @@ type
         w*, h*, material*: int
     
     # Water.
-    Water* = ref object of BaseMapObject
+    Water* = ref object of BaseNamedMapObject
         w*, h*, damage*: int
         friction*: bool
     
@@ -178,9 +178,9 @@ type
         weapons*: seq[Weapon]
         pushers*: seq[Pusher]
         vehicles*: seq[Vehicle]
+        waters*: seq[Water]
 
         # Unaddressable objects.
-        waters*: seq[Water]
         boxes*: seq[Box]
         engineMarks*: seq[EngineMark]
         backgrounds*: seq[Background]
@@ -261,6 +261,7 @@ proc dump*(box: Box): string =
 proc dump*(water: Water): string =
     ## Dumps water.
     return $(<>water(
+        uid = water.name,
         x = $water.x,
         y = $water.y,
         w = $water.w,
@@ -582,9 +583,10 @@ proc newBox*(map: Map, x, y, w, h, material = 0): Box {.discardable.} =
     )
     map.boxes.add(result)
 
-proc newWater*(map: Map, x, y, w, h, damage = 0, friction = true): Water {.discardable.} =
+proc newWater*(map: Map, name: string, x, y, w, h, damage = 0, friction = true): Water {.discardable.} =
     ## Creates new water.
     result = Water(
+        name: name,
         x: x, y: y, w: w, h: h,
         damage: damage,
         friction: friction
@@ -717,7 +719,17 @@ proc move*(trigger: Trigger, mov: Movable, reg: Region): Action {.discardable.} 
 proc move*(trigger: Trigger, reg1, reg2: Region): Action {.discardable.} =
     ## Move region 'A' to region 'B'
     trigger.addAction(2, @[reg1.name, reg2.name])
+proc move*(trigger: Trigger, water: Water, reg: Region): Action {.discardable.} =
+    # Move water 'A' to region 'B'
+    trigger.addAction(392, @[water.name, reg.name])
 
+
+proc changeDamage*(trigger: Trigger, water: Water, val: varargs[string, `$`]): Action {.discardable.} =
+    # Change water 'A' damage to string-value/variable 'B'
+    var B = ""
+    for i in val:
+        B.add i
+    trigger.addAction(395, @[water.name, B])
 
 proc changeSpeed*(trigger: Trigger, mov: Movable, value: int): Action {.discardable.} =
     ## Change movable 'A' speed to value 'B'
