@@ -874,7 +874,7 @@ proc getMessage*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
 proc variableCheck(var1: PBVar) =
     for i in ['#', '&', ';', '|', '=']:
         if i in $var1:
-            echo "[PB2I]: Variable ", $var1, " contains reserved character: ", i, ". You cannot synchronize this variable."
+            raise LibraryError.newException("[PB2I]: Variable " & $var1 & " contains reserved character: " & i & ". You cannot synchronize this variable.")
 
 proc sync*(trigger: Trigger, var1: PBVar): Action {.discardable.} =
     ## Synchronize value of variable 'A' overriding value
