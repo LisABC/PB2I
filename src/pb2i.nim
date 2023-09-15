@@ -367,7 +367,7 @@ proc dump*(weapon: Weapon): string =
         uid = weapon.name,
         x = $weapon.x,
         y = $weapon.y,
-        model = weapon.name,
+        model = weapon.model,
         upg = $weapon.level,
         command = $weapon.team
     ))
@@ -954,5 +954,19 @@ proc append*(trigger: Trigger, var1: PBVar, element: varargs[string, `$`]): Acti
 proc length*(trigger: Trigger, var1, var2: PBVar): Action {.discardable.} =
     ## Get length 'B' and save into 'A'
     trigger.addAction(151, @[$var1, $var2])
+
+proc createColourMatrix*(trigger: Trigger, var1: PBVar, mat: array[4 * 5, float]): Action {.discardable.} =
+    ## Convenience procedure that inserts matrix. (takes 2 actions)
+    var val = ""
+    for item in mat:
+        val.add($item)
+        val.add(",")
+    val = val[0 ..< ^1]
+    trigger.setVariable(var1, val)
+    trigger.split(var1, ",")
+
+proc colorGunWithMatrix*(trigger: Trigger, gun: Weapon, var1: PBVar): Action {.discardable.} =
+    ## Colors weapon 'A' with matrix stored in variable 'B'
+    trigger.addAction(403, @[gun.name, $var1])
 
 {.pop.}
