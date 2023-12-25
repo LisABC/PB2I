@@ -4,6 +4,7 @@ Nim library to automate map related things
 e.x: 
 ```nim
 import pb2i
+import pb2i/actions
 
 var map = newMap()
 

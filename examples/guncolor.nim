@@ -1,4 +1,5 @@
 import ../src/pb2i
+import ../src/pb2i/actions
 
 var map = newMap()
 
