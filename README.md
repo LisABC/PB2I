@@ -26,4 +26,4 @@ map.newTimer("#NT", callback=trigger, delay=0)
 "map.xml".writeFile map.dump
 ```
 
-Click [here](https://zenoabc.github.io/PB2I/) for documentation.
+Click [here](https://lisabc.github.io/PB2I/) for documentation.
